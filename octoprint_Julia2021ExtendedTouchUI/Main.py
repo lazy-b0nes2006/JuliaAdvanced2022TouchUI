@@ -11,7 +11,7 @@
  * Licence: AGPLv3
 *************************************************************************
 """
-Development = True   # set to True if running on any system other than RaspberryPi
+Development = False   # set to True if running on any system other than RaspberryPi
 
 import mainGUI_extended_abl
 import keyboard
