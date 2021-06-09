@@ -1,4 +1,4 @@
- Julia2020TouchUI
+ Julia 2021 Extended TouchUI
 ==================
 Touch UI for Julia 2021 based on `Python3` and  `PyQt5`
 
