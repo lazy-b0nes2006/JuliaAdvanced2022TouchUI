@@ -3,18 +3,15 @@
 Touch UI for Julia 2021 based on `Python3` and  `PyQt5`
 
 ## Development Requiements:
+see https://github.com/FracktalWorks/Python3_PyQt5_dev
 
 [ A simple getting started guide](https://nikolak.com/pyqt-qt-designer-getting-started/)
 
 
-1. PyQt4
-2. Qt Designer 4.8.7 ( requred to edit .ui file)
+1. PyQt5
+2. Qt Designer 5 with pyuic5 ( requred to edit .ui file and generate .py file)
 3. Websocket client ( pip install websocket-client )
 4. other dependencies that "Main.py" needs (see it's headers)
-
-The MainGUI.py file is generated from the mainGUI_extended.ui file using
- ```pyuic4 .\mainGUI_extended_abl.ui -o .\mainGUI_extended_abl.py```
-
 
 
 ## Running/Executing:
