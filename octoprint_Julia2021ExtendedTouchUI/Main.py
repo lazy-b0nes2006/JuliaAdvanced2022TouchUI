@@ -1682,7 +1682,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             os.system('sudo rm -rf /home/pi/.octoprint/users.yaml')
             os.system('sudo rm -rf /home/pi/.octoprint/printerProfiles/*')
             os.system('sudo rm -rf /home/pi/.octoprint/scripts/gcode')
-            os.system('sudo cp -f config/config_Julia2020ExtendedABLTouchUI.yaml /home/pi/.octoprint/config.yaml')
+            os.system('sudo cp -f config/config_Julia2021ExtendedTouchUI.yaml /home/pi/.octoprint/config.yaml')
             os.system('sudo rm -rf /home/pi/.fw_logo.dat')
             self.tellAndReboot("Settings restored. Rebooting...")
 
