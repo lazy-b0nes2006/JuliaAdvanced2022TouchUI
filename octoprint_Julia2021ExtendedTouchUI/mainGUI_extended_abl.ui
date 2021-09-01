@@ -173,7 +173,7 @@ QStatusBar::item {
 background-color: rgb(40, 40, 40);</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>29</number>
     </property>
     <widget class="QWidget" name="loadingPage">
      <widget class="QLabel" name="LoadingLabel">
@@ -2393,7 +2393,7 @@ QScrollBar::down-arrow:vertical {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>214</width>
+         <width>461</width>
          <height>630</height>
         </rect>
        </property>
@@ -3064,7 +3064,7 @@ border: 1px solid black;
 }
 
 QComboBox::item {
-	color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
 }
 
 QComboBox:editable {
@@ -4291,7 +4291,7 @@ border: 1px solid black;
 }
 
 QComboBox::item {
-	color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
 }
 
 QComboBox:editable {
@@ -8419,7 +8419,7 @@ QTabBar:focus {
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <property name="iconSize">
        <size>
@@ -10997,7 +10997,7 @@ border: 1px solid black;
 }
 
 QComboBox::item {
-	color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
 }
 
 QComboBox:editable {

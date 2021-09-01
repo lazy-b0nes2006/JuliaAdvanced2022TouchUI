@@ -86,9 +86,9 @@ Testing:
 # ++++++++++++++++++++++++Global variables++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-ip = '0.0.0.0:5000'
-apiKey = 'B508534ED20348F090B4D0AD637D3660'
-# ip = '192.168.0.107:5000'
+ip = '0.0.0.0'
+apiKey = 'AC1B2EDE2F4041B789544C1BC8874451'
+# ip = '192.168.0.34:5000'
 # apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
 filaments = [
@@ -138,19 +138,20 @@ def run_async(func):
 def getIP(interface):
     try:
         scan_result = \
-            subprocess.Popen("ifconfig | grep " + interface + " -A 1", stdout=subprocess.PIPE, shell=True).communicate()[0]
+            (subprocess.Popen("ifconfig | grep " + interface + " -A 1", stdout=subprocess.PIPE, shell=True).communicate()[0]).decode("utf-8")
         # Processing STDOUT into a dictionary that later will be converted to a json file later
-        rInetAddr = r"inet addr:\s*([\d.]+)"
+        rInetAddr = r"inet\s*([\d.]+)"
+        rInet6Addr = r"inet6"
+        mt6Ip = re.search(rInet6Addr, scan_result)
         mtIp = re.search(rInetAddr, scan_result)
-        if mtIp and len(mtIp.groups()) == 1:
+        if not(mt6Ip) and mtIp and len(mtIp.groups()) == 1:
             return str(mtIp.group(1))
     except:
         return None
 
-
 def getMac(interface):
     try:
-        mac = subprocess.Popen(" cat /sys/class/net/" + interface + "/address", 
+        mac = subprocess.Popen(" cat /sys/class/net/" + interface + "/address",
                                stdout=subprocess.PIPE, shell=True).communicate()[0].rstrip()
         if not mac:
             return "Not found"
@@ -165,7 +166,7 @@ def getWifiAp():
                               stdout=subprocess.PIPE, shell=True).communicate()[0].rstrip()
         if not ap:
             return "Not connected"
-        return ap
+        return ap.decode("utf-8")
     except:
         return "Error"
 
@@ -175,7 +176,7 @@ def getHostname():
         hostname = subprocess.Popen("cat /etc/hostname", stdout=subprocess.PIPE, shell=True).communicate()[0].rstrip()
         if not hostname:
             return "Not connected"
-        return hostname + ".local"
+        return hostname.decode("utf-8")  + ".local"
     except:
         return "Error"
 
@@ -277,16 +278,16 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             self._logger.addHandler(file_handler)
             self._logger.addHandler(stream_handler)
         try:
-            if not Development:
-                self.__packager = asset_bundle.AssetBundle()
-                self.__packager.save_time()
-                self.__timelapse_enabled = self.__packager.read_match() if self.__packager.time_delta() else True
-                self.__timelapse_started = not self.__packager.time_delta()
+            # if not Development:
+                # self.__packager = asset_bundle.AssetBundle()
+                # self.__packager.save_time()
+                # self.__timelapse_enabled = self.__packager.read_match() if self.__packager.time_delta() else True
+                # self.__timelapse_started = not self.__packager.time_delta()
 
-                self._logger.info("Hardware ID = {}, Unlocked = {}".format(self.__packager.hc(), self.__timelapse_enabled))
-                print("Hardware ID = {}, Unlocked = {}".format(self.__packager.hc(), self.__timelapse_enabled))
-                self._logger.info("File time = {}, Demo = {}".format(self.__packager.read_time(), self.__timelapse_started))
-                print("File time = {}, Demo = {}".format(self.__packager.read_time(), self.__timelapse_started))
+                # self._logger.info("Hardware ID = {}, Unlocked = {}".format(self.__packager.hc(), self.__timelapse_enabled))
+                # print("Hardware ID = {}, Unlocked = {}".format(self.__packager.hc(), self.__timelapse_enabled))
+                # self._logger.info("File time = {}, Demo = {}".format(self.__packager.read_time(), self.__timelapse_started))
+                # print("File time = {}, Demo = {}".format(self.__packager.read_time(), self.__timelapse_started))
             self.setupUi(self)
             self.stackedWidget.setCurrentWidget(self.loadingPage)
             self.setStep(10)
@@ -295,10 +296,10 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             self.setHomeOffsetBool = False
             self.currentImage = None
             self.currentFile = None
-            if not Development:
-                self.sanityCheck = ThreadSanityCheck(self._logger, virtual=not self.__timelapse_enabled)
-            else:
-                self.sanityCheck = ThreadSanityCheck(virtual=True)
+            # if not Development:
+            #     self.sanityCheck = ThreadSanityCheck(self._logger, virtual=not self.__timelapse_enabled)
+            # else:
+            self.sanityCheck = ThreadSanityCheck(virtual=True)
             self.sanityCheck.start()
             self.sanityCheck.loaded_signal.connect(self.proceed)
             self.sanityCheck.startup_error_signal.connect(self.handleStartupError)
@@ -313,7 +314,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
                 lineEdit.setPalette(p)
 
         except Exception as e:
-            self._logger.error(e.message)
+            self._logger.error(e)
 
     def setupUi(self, MainWindow):
         super(MainUiClass, self).setupUi(MainWindow)
@@ -356,8 +357,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.setActions()
         self.movie.stop()
         if not Development:
-            self.stackedWidget.setCurrentWidget(self.pgLock)
-            self.Lock_showLock()
+            self.stackedWidget.setCurrentWidget(self.homePage)
+            # self.Lock_showLock()
             self.setIPStatus()
         else:
             self.stackedWidget.setCurrentWidget(self.homePage)
@@ -486,8 +487,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.setFlowRateButton.pressed.connect(lambda: octopiclient.flowrate(self.flowRateSpinBox.value()))
         self.setFeedRateButton.pressed.connect(lambda: octopiclient.feedrate(self.feedRateSpinBox.value()))
 
-        self.moveZPBabyStep.pressed.connect(lambda: octopiclient.gcode(command='M290 Z0.025'))
-        self.moveZMBabyStep.pressed.connect(lambda: octopiclient.gcode(command='M290 Z-0.025'))
+        self.moveZPBabyStep.pressed.connect(lambda: octopiclient.gcode(command='SET_GCODE_OFFSET Z_ADJUST=0.025 MOVE=1'))
+        self.moveZMBabyStep.pressed.connect(lambda: octopiclient.gcode(command='SET_GCODE_OFFSET Z_ADJUST=-0.025 MOVE=1'))
 
 
         # ChangeFilament rutien
@@ -564,60 +565,60 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         # Filament sensor toggle
         self.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
 
-        # Lock settings
-        if not Development:
-            self.pgLock_pin.textChanged.connect(self.Lock_onPinInputChanged)
-
-            self.pgLock_bt1.clicked.connect(lambda: self.Lock_kbAdd("1"))
-            self.pgLock_bt2.clicked.connect(lambda: self.Lock_kbAdd("2"))
-            self.pgLock_bt3.clicked.connect(lambda: self.Lock_kbAdd("3"))
-            self.pgLock_bt4.clicked.connect(lambda: self.Lock_kbAdd("4"))
-            self.pgLock_bt5.clicked.connect(lambda: self.Lock_kbAdd("5"))
-            self.pgLock_bt6.clicked.connect(lambda: self.Lock_kbAdd("6"))
-            self.pgLock_bt7.clicked.connect(lambda: self.Lock_kbAdd("7"))
-            self.pgLock_bt8.clicked.connect(lambda: self.Lock_kbAdd("8"))
-            self.pgLock_bt9.clicked.connect(lambda: self.Lock_kbAdd("9"))
-            self.pgLock_bt0.clicked.connect(lambda: self.Lock_kbAdd("0"))
-            self.pgLock_btBackspace.clicked.connect(lambda: self.pgLock_pin.backspace())
-            self.pgLock_btSubmit.clicked.connect(self.Lock_submitPIN)
-
-    ''' +++++++++++++++++++++++++Lock Settings+++++++++++++++++++++++++++++++++++ '''
-    def Lock_showLock(self):
-        self.pgLock_HID.setText(str(self.__packager.hc()))
-        self.pgLock_pin.setText("")
-        if not self.__timelapse_enabled:
-            # dialog.WarningOk(self, "Machine locked!", overlay=True)
-            self.stackedWidget.setCurrentWidget(self.pgLock)
-        else:
-            # if self.__timelapse_started:
-            #     dialog.WarningOk(self, "Demo mode!", overlay=True)
-            self.stackedWidget.setCurrentWidget(self.homePage)
-
-    def Lock_kbAdd(self, txt):
-        if len(str(self.pgLock_pin.text())) < 9:
-            self.pgLock_pin.setText(str(self.pgLock_pin.text()) + txt)
-        self.pgLock_pin.setFocus()
-
-    def Lock_onPinInputChanged(self):
-        self.pgLock_btBackspace.setEnabled(len(str(self.pgLock_pin.text())) > 0)
-        self.pgLock_btSubmit.setEnabled(len(str(self.pgLock_pin.text())) > 3)
-
-    def Lock_submitPIN(self):
-        k = -1
-        t = self.pgLock_pin.text()
-        try:
-            k = int(t)
-            if self.__packager.match(k):
-                self.__packager.save(k)
-                # self.__timelapse_enabled = True
-                if dialog.SuccessOk(self, "Machine unlocked!", overlay=True):
-                    self.tellAndReboot()
-                self.stackedWidget.setCurrentWidget(self.homePage)
-            else:
-                dialog.WarningOk(self, "Incorrect unlock code")
-        except Exception as e:
-            dialog.WarningOk(self, "Error while parsing unlock code")
-            print(e)
+    #     # Lock settings
+    #     if not Development:
+    #         self.pgLock_pin.textChanged.connect(self.Lock_onPinInputChanged)
+    #
+    #         self.pgLock_bt1.clicked.connect(lambda: self.Lock_kbAdd("1"))
+    #         self.pgLock_bt2.clicked.connect(lambda: self.Lock_kbAdd("2"))
+    #         self.pgLock_bt3.clicked.connect(lambda: self.Lock_kbAdd("3"))
+    #         self.pgLock_bt4.clicked.connect(lambda: self.Lock_kbAdd("4"))
+    #         self.pgLock_bt5.clicked.connect(lambda: self.Lock_kbAdd("5"))
+    #         self.pgLock_bt6.clicked.connect(lambda: self.Lock_kbAdd("6"))
+    #         self.pgLock_bt7.clicked.connect(lambda: self.Lock_kbAdd("7"))
+    #         self.pgLock_bt8.clicked.connect(lambda: self.Lock_kbAdd("8"))
+    #         self.pgLock_bt9.clicked.connect(lambda: self.Lock_kbAdd("9"))
+    #         self.pgLock_bt0.clicked.connect(lambda: self.Lock_kbAdd("0"))
+    #         self.pgLock_btBackspace.clicked.connect(lambda: self.pgLock_pin.backspace())
+    #         self.pgLock_btSubmit.clicked.connect(self.Lock_submitPIN)
+    #
+    # ''' +++++++++++++++++++++++++Lock Settings+++++++++++++++++++++++++++++++++++ '''
+    # def Lock_showLock(self):
+    #     self.pgLock_HID.setText(str(self.__packager.hc()))
+    #     self.pgLock_pin.setText("")
+    #     if not self.__timelapse_enabled:
+    #         # dialog.WarningOk(self, "Machine locked!", overlay=True)
+    #         self.stackedWidget.setCurrentWidget(self.pgLock)
+    #     else:
+    #         # if self.__timelapse_started:
+    #         #     dialog.WarningOk(self, "Demo mode!", overlay=True)
+    #         self.stackedWidget.setCurrentWidget(self.homePage)
+    #
+    # def Lock_kbAdd(self, txt):
+    #     if len(str(self.pgLock_pin.text())) < 9:
+    #         self.pgLock_pin.setText(str(self.pgLock_pin.text()) + txt)
+    #     self.pgLock_pin.setFocus()
+    #
+    # def Lock_onPinInputChanged(self):
+    #     self.pgLock_btBackspace.setEnabled(len(str(self.pgLock_pin.text())) > 0)
+    #     self.pgLock_btSubmit.setEnabled(len(str(self.pgLock_pin.text())) > 3)
+    #
+    # def Lock_submitPIN(self):
+    #     k = -1
+    #     t = self.pgLock_pin.text()
+    #     try:
+    #         k = int(t)
+    #         if self.__packager.match(k):
+    #             self.__packager.save(k)
+    #             # self.__timelapse_enabled = True
+    #             if dialog.SuccessOk(self, "Machine unlocked!", overlay=True):
+    #                 self.tellAndReboot()
+    #             self.stackedWidget.setCurrentWidget(self.homePage)
+    #         else:
+    #             dialog.WarningOk(self, "Incorrect unlock code")
+    #     except Exception as e:
+    #         dialog.WarningOk(self, "Error while parsing unlock code")
+    #         print(e)
 
     ''' +++++++++++++++++++++++++Print Restore+++++++++++++++++++++++++++++++++++ '''
 
@@ -898,12 +899,17 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         wlan0_config_file.truncate()
         ascii_ssid = self.wifiSettingsComboBox.currentText()
         # unicode_ssid = ascii_ssid.decode('string_escape').decode('utf-8')
+        wlan0_config_file.write(u"country=IN\n")
+        wlan0_config_file.write(u"ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n")
+        wlan0_config_file.write(u"update_config=1\n")
         wlan0_config_file.write(u"network={\n")
         wlan0_config_file.write(u'ssid="' + str(ascii_ssid) + '"\n')
         if self.hiddenCheckBox.isChecked():
             wlan0_config_file.write(u'scan_ssid=1\n')
+        # wlan0_config_file.write(u"scan_ssid=1\n")
         if str(self.wifiPasswordLineEdit.text()) != "":
             wlan0_config_file.write(u'psk="' + str(self.wifiPasswordLineEdit.text()) + '"\n')
+        # wlan0_config_file.write(u"key_mgmt=WPA-PSK\n")
         wlan0_config_file.write(u'}')
         wlan0_config_file.close()
         self.restartWifiThreadObject = ThreadRestartNetworking(ThreadRestartNetworking.WLAN)
@@ -919,6 +925,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
     def wifiReconnectResult(self, x):
         self.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         if x is not None:
+            print("Ouput from signal " + x)
             self.wifiMessageBox.setLocalIcon('success.png')
             self.wifiMessageBox.setText('Connected, IP: ' + x)
             self.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -936,8 +943,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.wifiIp.setText("Not connected" if not ipWifi else ipWifi)
         self.ipStatus.setText("Not connected" if not ipWifi else ipWifi)
         self.lanIp.setText("Not connected" if not ipEth else ipEth)
-        self.wifiMac.setText(getMac(ThreadRestartNetworking.WLAN))
-        self.lanMac.setText(getMac(ThreadRestartNetworking.ETH))
+        self.wifiMac.setText(getMac(ThreadRestartNetworking.WLAN).decode('utf8'))
+        self.lanMac.setText(getMac(ThreadRestartNetworking.ETH).decode('utf8'))
         self.stackedWidget.setCurrentWidget(self.networkInfoPage)
 
     def wifiSettings(self):
@@ -955,7 +962,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         scan_result = \
             subprocess.Popen("iwlist wlan0 scan | grep 'ESSID'", stdout=subprocess.PIPE, shell=True).communicate()[0]
         # Processing STDOUT into a dictionary that later will be converted to a json file later
-        scan_result = scan_result.split('ESSID:')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
+        scan_result = scan_result.decode('utf8').split('ESSID:')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
         scan_result = [s.strip() for s in scan_result]
         scan_result = [s.strip('"') for s in scan_result]
         scan_result = filter(None, scan_result)
@@ -998,9 +1005,9 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
     def ethNetworkInfo(self):
         txt = subprocess.Popen("cat /etc/dhcpcd.conf", stdout=subprocess.PIPE, shell=True).communicate()[0]
 
-        reEthGlobal = r"interface\s+eth0\s?(static\s+[a-z0-9./_=\s]+\n)*"
-        reEthAddress = r"static\s+ip_address=([\d.]+)(/[\d]{1,2})?"
-        reEthGateway = r"static\s+routers=([\d.]+)(/[\d]{1,2})?"
+        reEthGlobal = b"interface\s+eth0\s?(static\s+[a-z0-9./_=\s]+\n)*"
+        reEthAddress = b"static\s+ip_address=([\d.]+)(/[\d]{1,2})?"
+        reEthGateway = b"static\s+routers=([\d.]+)(/[\d]{1,2})?"
 
         mtEthGlobal = re.search(reEthGlobal, txt)
 
@@ -1094,7 +1101,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         os.system('sudo /home/pi/setenv.sh')
 
     def showRotateDisplaySettingsPage(self):
-        txt = subprocess.Popen("cat /boot/config.txt", stdout=subprocess.PIPE, shell=True).communicate()[0]
+        txt = (subprocess.Popen("cat /boot/config.txt", stdout=subprocess.PIPE, shell=True).communicate()[0]).decode("utf-8")
 
         reRot = r"dtoverlay\s*=\s*waveshare35a(\s*:\s*rotate\s*=\s*([0-9]{1,3})){0,1}"
         mtRot = re.search(reRot, txt)
@@ -1108,7 +1115,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.rotateDisplaySettingsPage)
 
     def saveRotateDisplaySettings(self):
-        txt1 = subprocess.Popen("cat /boot/config.txt", stdout=subprocess.PIPE, shell=True).communicate()[0]
+        txt1 = (subprocess.Popen("cat /boot/config.txt", stdout=subprocess.PIPE, shell=True).communicate()[0]).decode("utf-8")
 
         reRot = r"dtoverlay\s*=\s*waveshare35a(\s*:\s*rotate\s*=\s*([0-9]{1,3})){0,1}"
         if self.rotateDisplaySettingsComboBox.currentIndex() == 1:
@@ -1125,14 +1132,14 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             if dialog.WarningOk(self, "Failed to change rotation settings", overlay=True):
                 return
 
-        txt2 = subprocess.Popen("cat /etc/X11/xorg.conf.d/99-calibration.conf", stdout=subprocess.PIPE,
-                                shell=True).communicate()[0]
+        txt2 = (subprocess.Popen("cat /etc/X11/xorg.conf.d/99-calibration.conf", stdout=subprocess.PIPE,
+                                shell=True).communicate()[0]).decode("utf-8")
 
-        reTouch = r"Option\s+\"TransformationMatrix\"\s+\"([\d\s-]+)\""
+        reTouch = r"Option\s+\"Calibration\"\s+\"([\d\s-]+)\""
         if self.rotateDisplaySettingsComboBox.currentIndex() == 1:
-            op2 = "Option \"TransformationMatrix\"  \"0 1 0 -1 0 1 0 0 1\""
+            op2 = "Option \"Calibration\"  \"3919 208 236 3913\""
         else:
-            op2 = "Option \"TransformationMatrix\"  \"0 -1 1 1 0 0 0 0 1\""
+            op2 = "Option \"Calibration\"  \"208 3919 3913 236\""
         res2 = re.sub(reTouch, op2, txt2, flags=re.I)
 
         try:
@@ -1177,7 +1184,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.changeFilamentComboBox.clear()
         self.changeFilamentComboBox.addItems(filaments.keys())
         #Update
-        if self.tool0TargetTemperature > 0 and self.printerStatusText in ["Printing","Paused"]:
+        print(self.tool0TargetTemperature)
+        if self.tool0TargetTemperature  and self.printerStatusText in ["Printing","Paused"]:
             self.changeFilamentComboBox.addItem("Loaded Filament")
             index = self.changeFilamentComboBox.findText("Loaded Filament")
             if index >= 0 :
@@ -1236,7 +1244,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.fileListUSBPage)
         self.fileListWidgetUSB.clear()
         files = subprocess.Popen("ls /media/usb0 | grep gcode", stdout=subprocess.PIPE, shell=True).communicate()[0]
-        files = files.split('\n')
+        files = files.decode('utf-8').split('\n')
         files = filter(None, files)
         # for item in files:
         #     self.fileListWidgetUSB.addItem(item)
@@ -1366,6 +1374,13 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         runs at 1HZ, so do things that need to be constantly updated only. This also controls the cooling fan depending on the temperatures
         :param temperature: dict containing key:value pairs with keys being the tools, bed and their values being their corresponding temperratures
         '''
+        if temperature['tool0Target'] == None:
+            temperature['tool0Target'] = 0
+        if temperature['bedTarget'] == None:
+            temperature['bedTarget'] = 0
+        if temperature['bedActual'] == None:
+            temperature['bedActual'] = 0
+
 
         if temperature['tool0Target'] == 0:
             self.tool0TempBar.setMaximum(300)
@@ -1491,10 +1506,10 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             self.changeFilamentButton.setDisabled(True)
             self.menuCalibrateButton.setDisabled(True)
             self.menuPrintButton.setDisabled(True)
-            if not Development:
-                if not self.__timelapse_enabled:
-                    octopiclient.cancelPrint()
-                    self.coolDownAction()
+            # if not Development:
+            #     if not self.__timelapse_enabled:
+            #         octopiclient.cancelPrint()
+            #         self.coolDownAction()
 
         elif status == "Paused":
             self.playPauseButton.setChecked(False)
@@ -1682,7 +1697,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             os.system('sudo rm -rf /home/pi/.octoprint/users.yaml')
             os.system('sudo rm -rf /home/pi/.octoprint/printerProfiles/*')
             os.system('sudo rm -rf /home/pi/.octoprint/scripts/gcode')
-            os.system('sudo cp -f config/config_Julia2021ExtendedTouchUI.yaml /home/pi/.octoprint/config.yaml')
+            os.system('sudo cp -f config/config_Julia2020ExtendedABLTouchUI.yaml /home/pi/.octoprint/config.yaml')
             os.system('sudo rm -rf /home/pi/.fw_logo.dat')
             self.tellAndReboot("Settings restored. Rebooting...")
 
@@ -1908,6 +1923,7 @@ class ThreadSanityCheck(QtCore.QThread):
                     result = \
                     subprocess.Popen("dmesg | grep 'ttyUSB'", stdout=subprocess.PIPE, shell=True).communicate()[0]
                     result = result.split('\n')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
+                    print(result)
                     result = [s.strip() for s in result]
                     for line in result:
                         if 'FTDI' in line:
@@ -1954,20 +1970,20 @@ class ThreadRestartNetworking(QtCore.QThread):
     ETH = "eth0"
     signal = QtCore.pyqtSignal('PyQt_PyObject')
 
-    def __init__(self, interface, signal):
+    def __init__(self, interface):
         super(ThreadRestartNetworking, self).__init__()
         self.interface = interface
-        self.signal = signal
     def run(self):
         self.restart_interface()
         attempt = 0
         while attempt < 3:
+            # print(getIP(self.interface))
             if getIP(self.interface):
                 self.signal.emit(getIP(self.interface))
                 break
             else:
                 attempt += 1
-                time.sleep(1)
+                time.sleep(5)
         if attempt >= 3:
             self.signal.emit(None)
 
@@ -1976,8 +1992,14 @@ class ThreadRestartNetworking(QtCore.QThread):
         restars wlan0 wireless interface to use new changes in wpa_supplicant.conf file
         :return:
         '''
-        subprocess.call(["ifdown", "--force", self.interface], shell=False)
-        subprocess.call(["ifup", "--force", self.interface], shell=False)
+        if self.interface == "wlan0":
+            subprocess.call(["wpa_cli","-i",  self.interface, "reconfigure"], shell=False)
+        if self.interface == "eth0":
+            subprocess.call(["ifconfig",  self.interface, "down"], shell=False)
+            time.sleep(1)
+            subprocess.call(["ifconfig", self.interface, "up"], shell=False)
+        # subprocess.call(["ifdown", "--force", self.interface], shell=False)
+        # subprocess.call(["ifup", "--force", self.interface], shell=False)
         time.sleep(5)
 
 
