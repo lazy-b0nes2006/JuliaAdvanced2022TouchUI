@@ -415,12 +415,15 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             lambda: self.stackedWidget.setCurrentWidget(self.calibrationWizardPage))
         self.calibrationWizardBackButton.clicked.connect(
             lambda: self.stackedWidget.setCurrentWidget(self.calibratePage))
-        self.quickCalibrationButton.clicked.connect(self.quickStep1)
+        self.quickCalibrationButton.clicked.connect(self.quickStep6)
+        self.fullCalibrationButton.clicked.connect(self.quickStep1)
         self.quickStep1NextButton.clicked.connect(self.quickStep2)
         self.quickStep2NextButton.clicked.connect(self.quickStep3)
         self.quickStep3NextButton.clicked.connect(self.quickStep4)
         self.quickStep4NextButton.clicked.connect(self.quickStep5)
-        self.quickStep5NextButton.clicked.connect(self.doneStep)
+        self.quickStep5NextButton.clicked.connect(self.quickStep6)
+        self.quickStep6NextButton.clicked.connect(self.doneStep)
+
         # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
         # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
         self.quickStep1CancelButton.pressed.connect(self.cancelStep)
@@ -428,6 +431,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         self.quickStep3CancelButton.pressed.connect(self.cancelStep)
         self.quickStep4CancelButton.pressed.connect(self.cancelStep)
         self.quickStep5CancelButton.pressed.connect(self.cancelStep)
+        self.quickStep6CancelButton.pressed.connect(self.cancelStep)
 
         # PrintLocationScreen
         self.printLocationScreenBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.MenuPage))
@@ -1643,7 +1647,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
 
     def quickStep4(self):
         '''
-        levels decond leveling position
+        levels second leveling position
         '''
         self.stackedWidget.setCurrentWidget(self.quickStep4Page)
         octopiclient.jog(z=10, absolute=True, speed=1500)
@@ -1660,6 +1664,14 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
         octopiclient.jog(z=10, absolute=True, speed=1500)
         octopiclient.jog(x=calibrationPosition['X3'], y=calibrationPosition['Y3'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
+
+    def quickStep6(self):
+        '''
+        Performs Auto bed Leveiling
+        '''
+        self.stackedWidget.setCurrentWidget(self.quickStep6Page)
+        octopiclient.gcode(command='M190 S70')
+        octopiclient.gcode(command='G29') 
 
     def doneStep(self):
         '''
