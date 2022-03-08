@@ -408,19 +408,25 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         self.nozzleOffsetSetButton.pressed.connect(
             lambda: self.setZHomeOffset(self.nozzleOffsetDoubleSpinBox.value(), True))
         self.nozzleOffsetBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.calibratePage))
+        #Bypass calibration wizzard page for not using Klipper
+        # self.calibrationWizardButton.clicked.connect(
+        #     lambda: self.stackedWidget.setCurrentWidget(self.calibrationWizardPage))
+        self.calibrationWizardButton.clicked.connect(self.quickStep1)
 
-        self.calibrationWizardButton.clicked.connect(
-            lambda: self.stackedWidget.setCurrentWidget(self.calibrationWizardPage))
         self.calibrationWizardBackButton.clicked.connect(
             lambda: self.stackedWidget.setCurrentWidget(self.calibratePage))
-        self.quickCalibrationButton.clicked.connect(self.quickStep6)
-        self.fullCalibrationButton.clicked.connect(self.quickStep1)
+        #required for Klipper
+        # self.quickCalibrationButton.clicked.connect(self.quickStep6)
+        # self.fullCalibrationButton.clicked.connect(self.quickStep1)
+
         self.quickStep1NextButton.clicked.connect(self.quickStep2)
         self.quickStep2NextButton.clicked.connect(self.quickStep3)
         self.quickStep3NextButton.clicked.connect(self.quickStep4)
         self.quickStep4NextButton.clicked.connect(self.quickStep5)
-        self.quickStep5NextButton.clicked.connect(self.quickStep6)
-        self.quickStep6NextButton.clicked.connect(self.doneStep)
+        self.quickStep5NextButton.clicked.connect(self.doneStep)
+        # Required for Klipper
+        # self.quickStep5NextButton.clicked.connect(self.quickStep6)
+        # self.quickStep6NextButton.clicked.connect(self.doneStep)
 
         # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
         # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
@@ -429,7 +435,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         self.quickStep3CancelButton.pressed.connect(self.cancelStep)
         self.quickStep4CancelButton.pressed.connect(self.cancelStep)
         self.quickStep5CancelButton.pressed.connect(self.cancelStep)
-        self.quickStep6CancelButton.pressed.connect(self.cancelStep)
+        # self.quickStep6CancelButton.pressed.connect(self.cancelStep)
 
         # PrintLocationScreen
         self.printLocationScreenBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.MenuPage))
@@ -1665,13 +1671,13 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         octopiclient.jog(x=calibrationPosition['X3'], y=calibrationPosition['Y3'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
 
-    def quickStep6(self):
-        '''
-        Performs Auto bed Leveiling
-        '''
-        self.stackedWidget.setCurrentWidget(self.quickStep6Page)
-        octopiclient.gcode(command='M190 S70')
-        octopiclient.gcode(command='G29') 
+    # def quickStep6(self):
+    #     '''
+    #     Performs Auto bed Leveiling, required for Klipper
+    #     '''
+    #     self.stackedWidget.setCurrentWidget(self.quickStep6Page)
+    #     octopiclient.gcode(command='M190 S70')
+    #     octopiclient.gcode(command='G29')
 
     def doneStep(self):
         '''
