@@ -8,7 +8,7 @@ see https://github.com/FracktalWorks/Python3_PyQt5_dev
 [ A simple getting started guide](https://nikolak.com/pyqt-qt-designer-getting-started/)
 
 
-1. PyQt5
+1. PyQt5 
 2. Qt Designer 5 with pyuic5 ( requred to edit .ui file and generate .py file)
 3. Websocket client ( pip install websocket-client )
 4. other dependencies that "Main.py" needs (see it's headers)

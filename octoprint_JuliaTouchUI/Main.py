@@ -13,7 +13,7 @@
 """
 Development = False   # set to True if running on any system other than RaspberryPi
 
-import mainGUI_extended_abl
+import mainGUI_julia
 import keyboard
 import dialog
 import styles
@@ -87,9 +87,7 @@ Testing:
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ip = '0.0.0.0'
-apiKey = 'AC1B2EDE2F4041B789544C1BC8874451'
-# ip = '192.168.0.34:5000'
-# apiKey = 'B508534ED20348F090B4D0AD637D3660'
+apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
 filaments = [
                 ("PLA", 200),
@@ -256,10 +254,10 @@ class ClickableLineEdit(QtWidgets.QLineEdit):
         self.clicked_signal.emit()
 
 
-class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
+class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
     '''
     Main GUI Workhorse, all slots and events defined within
-    The main implementation class that inherits methods, variables etc from mainGUI_extended_abl.py and QMainWindow
+    The main implementation class that inherits methods, variables etc from mainGUI_julia.py and QMainWindow
     '''
 
     def __init__(self):
@@ -1709,7 +1707,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_extended_abl.Ui_MainWindow):
             os.system('sudo rm -rf /home/pi/.octoprint/users.yaml')
             os.system('sudo rm -rf /home/pi/.octoprint/printerProfiles/*')
             os.system('sudo rm -rf /home/pi/.octoprint/scripts/gcode')
-            os.system('sudo cp -f config/config_Julia2020ExtendedABLTouchUI.yaml /home/pi/.octoprint/config.yaml')
+            os.system('sudo cp -f config/config_JuliaTouchUI.yaml /home/pi/.octoprint/config.yaml')
             os.system('sudo rm -rf /home/pi/.fw_logo.dat')
             self.tellAndReboot("Settings restored. Rebooting...")
 
