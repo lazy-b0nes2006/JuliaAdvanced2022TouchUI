@@ -297,7 +297,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
             # if not Development:
             #     self.sanityCheck = ThreadSanityCheck(self._logger, virtual=not self.__timelapse_enabled)
             # else:
-            self.sanityCheck = ThreadSanityCheck(virtual=True)
+            self.sanityCheck = ThreadSanityCheck(virtual=False)
             self.sanityCheck.start()
             self.sanityCheck.loaded_signal.connect(self.proceed)
             self.sanityCheck.startup_error_signal.connect(self.handleStartupError)
