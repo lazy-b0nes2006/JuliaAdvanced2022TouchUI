@@ -1938,14 +1938,16 @@ class ThreadSanityCheck(QtCore.QThread):
                     break
                 octopiclient = octoprintAPI(ip, apiKey)
                 if not self.virtual:
-                    result = \
-                    subprocess.Popen("dmesg | grep 'ttyUSB'", stdout=subprocess.PIPE, shell=True).communicate()[0]
-                    result = result.split('\n')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
+                    result = subprocess.Popen("dmesg | grep 'ttyUSB'", stdout=subprocess.PIPE, shell=True).communicate()[0]
+                    result = result.split(b'\n')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
                     print(result)
                     result = [s.strip() for s in result]
                     for line in result:
-                        if 'FTDI' in line:
-                            self.MKSPort = line[line.index('ttyUSB'):line.index('ttyUSB') + 7]
+                        if b'FTDI' in line:
+                            self.MKSPort = line[line.index(b'ttyUSB'):line.index(b'ttyUSB') + 7].decode('utf-8')
+                            print(self.MKSPort)
+                        if b'ch34' in line:
+                            self.MKSPort = line[line.index(b'ttyUSB'):line.index(b'ttyUSB') + 7].decode('utf-8')
                             print(self.MKSPort)
 
                     if not self.MKSPort:
@@ -2020,8 +2022,6 @@ class ThreadRestartNetworking(QtCore.QThread):
         # subprocess.call(["ifup", "--force", self.interface], shell=False)
         time.sleep(5)
 
-
-
 if __name__ == '__main__':
     # app = QtGui.QApplication(sys.argv)
     app = QtWidgets.QApplication(sys.argv)
@@ -2035,4 +2035,3 @@ if __name__ == '__main__':
     # charm = FlickCharm()
     # charm.activateOn(MainWindow.FileListWidget)
 sys.exit(app.exec_())
-
