@@ -1236,14 +1236,16 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         files = []
         for file in octopiclient.retrieveFileInformation()['files']:
             if file["type"] == "machinecode":
-                if ".gcode" in file:
-                    files.append(file)
+                files.append(file)
 
         self.fileListWidget.clear()
         files.sort(key=lambda d: d['date'], reverse=True)
         # for item in [f['name'] for f in files] :
         #     self.fileListWidget.addItem(item)
-        self.fileListWidget.addItems([f['name'] for f in files])
+        for f in files:
+            if ".gcode" in f['name']:
+                self.fileListWidget.addItem(f['name'])
+        #self.fileListWidget.addItems([f['name'] for f in files])
         self.fileListWidget.setCurrentRow(0)
 
     def fileListUSB(self):
