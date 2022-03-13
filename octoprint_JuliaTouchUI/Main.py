@@ -178,7 +178,6 @@ def getHostname():
     except:
         return "Error"
 
-
 class BuzzerFeedback(object):
     def __init__(self, buzzerPin):
         if not Development:
@@ -310,6 +309,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
                 p = lineEdit.palette()
                 p.setColor(QtGui.QPalette.Highlight, QtGui.QColor(40, 40, 40))
                 lineEdit.setPalette(p)
+
 
         except Exception as e:
             self._logger.error(e)
@@ -1236,7 +1236,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         files = []
         for file in octopiclient.retrieveFileInformation()['files']:
             if file["type"] == "machinecode":
-                files.append(file)
+                if ".gcode" in file:
+                    files.append(file)
 
         self.fileListWidget.clear()
         files.sort(key=lambda d: d['date'], reverse=True)

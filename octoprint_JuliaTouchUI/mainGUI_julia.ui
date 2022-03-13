@@ -173,7 +173,7 @@ QStatusBar::item {
 background-color: rgb(40, 40, 40);</string>
     </property>
     <property name="currentIndex">
-     <number>16</number>
+     <number>30</number>
     </property>
     <widget class="QWidget" name="loadingPage">
      <widget class="QLabel" name="LoadingLabel">
@@ -2392,7 +2392,7 @@ QScrollBar::down-arrow:vertical {
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>-312</y>
          <width>461</width>
          <height>630</height>
         </rect>
@@ -4778,52 +4778,52 @@ background-color: rgba(255, 255, 255, 0);</string>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-
-QScrollBar:vertical {
- border: 1px solid black; 
+       <string notr="true"> QScrollBar:vertical {
+     border: 1px solid black;
 border-radius: 5px;
-background: rgb(40,40,40);
-width: 62px;
-}
-
-/* Sets up the color and height of handle */
-QScrollBar::handle:vertical {
+	background-color: rgb(40,40,40);
+     width: 80px;
+     margin: 70px 0 70px 0;
+ }
+ QScrollBar::handle:vertical {
 border-radius: 5px;
 background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.188, stop:0 rgba(180, 180, 180, 255), stop:1 rgba(255, 255, 255, 255));
 min-height: 20px;
-}
+ }
+ QScrollBar::add-line:vertical {
+     border: 1px solid black;
+background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.188, stop:0 rgba(180, 180, 180, 255), stop:1 rgba(255, 255, 255, 255));
+     height:65px;
+border-radius: 5px;
+     subcontrol-position: bottom;
+     subcontrol-origin: margin;
+ }
 
+ QScrollBar::sub-line:vertical {
+     border: 1px solid black;
+background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.188, stop:0 rgba(180, 180, 180, 255), stop:1 rgba(255, 255, 255, 255));
+     height: 65px;
+border-radius: 5px;
+     subcontrol-position: top;
+     subcontrol-origin: margin;
+ }
 
+QScrollBar::up-arrow:vertical {
+ image: url(./templates/img/arrows.png);
+    width: 40px;
+    height: 40px;
+ padding: 5px;
+ }
+QScrollBar::down-arrow:vertical {
+ image: url(./templates/img/arrows-5.png);
+    width: 40px;
+    height: 40px;
+ padding: 5px;
+ }
 
-
-/* This remvoes the bottom button by setting the height to 0px */
-QScrollBar::add-line:vertical {
-height: 0px;
-subcontrol-position: bottom;
-subcontrol-origin: margin;
-}
-
-/* This remvoes the top button by setting the height to 0px */
-QScrollBar::sub-line:vertical {
-height: 0px;
-subcontrol-position: top;
-subcontrol-origin: margin;
-}
-
-/*
-QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-border: 2px solid grey;
-width: 5px;
-height: 5px;
-background: white;
-}
-
-
-/* need this to get rid of crosshatching on scrollbar background */
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-background: none;
-}
+ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+     background: none;
+ }
 
 QListView::item {
 color: rgb(255, 255, 255);
@@ -11137,20 +11137,16 @@ QPushButton:default {
        <string notr="true"> QScrollBar:vertical {
      border: 1px solid black;
 border-radius: 5px;
-    background-color: rgb(40,40,40);
-     width: 60px;
-     margin: 67px 0 67px 0;
+	background-color: rgb(40,40,40);
+     width: 80px;
+     margin: 70px 0 70px 0;
  }
-
-/* Sets up the color and height of handle */
-QScrollBar::handle:vertical {
+ QScrollBar::handle:vertical {
 border-radius: 5px;
 background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.188, stop:0 rgba(180, 180, 180, 255), stop:1 rgba(255, 255, 255, 255));
-min-height: 7px;
-}
-
-
-QScrollBar::add-line:vertical {
+min-height: 20px;
+ }
+ QScrollBar::add-line:vertical {
      border: 1px solid black;
 background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0.188, stop:0 rgba(180, 180, 180, 255), stop:1 rgba(255, 255, 255, 255));
      height:65px;
@@ -11181,10 +11177,9 @@ QScrollBar::down-arrow:vertical {
  padding: 5px;
  }
 
-/* need this to get rid of crosshatching on scrollbar background */
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-background: none;
-}
+ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+     background: none;
+ }
 
 QComboBox {
 border: 1px solid black;
@@ -11232,6 +11227,8 @@ height: 30px;
 QComboBox QAbstractItemView {
     selection-background-color: rgb(40, 40, 40);
     background: white;
+margin-top: 50px;
+padding-bottom: 50px;
 }</string>
       </property>
       <property name="editable">
