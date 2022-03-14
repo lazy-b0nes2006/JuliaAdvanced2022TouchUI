@@ -1,3 +1,5 @@
 include README.md
 recursive-include octoprint_JuliaTouchUI/templates *
 recursive-include octoprint_JuliaTouchUI/config *
+include versioneer.py
+include octoprint_Julia2018PrintRestore/_version.py

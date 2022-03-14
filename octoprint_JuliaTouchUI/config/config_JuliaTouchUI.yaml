@@ -93,6 +93,9 @@ printerProfiles:
       height: 305.0
       origin: lowerleft
       width: 250.0
+serial:
+  blacklistedPorts:
+  - /dev/ttyS*
 server:
   commands:
     serverRestartCommand: sudo service octoprint restart
