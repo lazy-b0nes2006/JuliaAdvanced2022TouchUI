@@ -13,7 +13,7 @@
 """
 Development = False   # set to True if running on any system other than RaspberryPi
 
-import mainGUI_JuliaAdvanced2022TouchUI
+import mainGUI
 import keyboard
 import dialog
 import styles
@@ -253,10 +253,10 @@ class ClickableLineEdit(QtWidgets.QLineEdit):
         self.clicked_signal.emit()
 
 
-class MainUiClass(QtWidgets.QMainWindow, mainGUI_JuliaAdvanced2022TouchUI.Ui_MainWindow):
+class MainUiClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     '''
     Main GUI Workhorse, all slots and events defined within
-    The main implementation class that inherits methods, variables etc from mainGUI_julia.py and QMainWindow
+    The main implementation class that inherits methods, variables etc from mainGUI.py and QMainWindow
     '''
 
     def __init__(self):
@@ -1720,7 +1720,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_JuliaAdvanced2022TouchUI.Ui_Mai
             os.system('sudo cp -f config/users.yaml /home/pi/.octoprint/users.yaml')
             os.system('sudo rm -rf /home/pi/.octoprint/printerProfiles/*')
             os.system('sudo rm -rf /home/pi/.octoprint/scripts/gcode')
-            os.system('sudo cp -f config/config_JuliaTouchUI.yaml /home/pi/.octoprint/config.yaml')
+            os.system('sudo cp -f config/config.yaml /home/pi/.octoprint/config.yaml')
             # os.system('sudo rm -rf /home/pi/.fw_logo.dat')
             self.tellAndReboot("Settings restored. Rebooting...")
 
