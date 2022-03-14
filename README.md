@@ -3,7 +3,7 @@
 Touch UI for Julia 2022 based on `Python3` and  `PyQt5`
 
 ## Development Requiements:
-see https://github.com/FracktalWorks/Python3_PyQt5_dev
+see https://github.com/FracktalWorks/Julia-Touch-UI-Documentation
 
 [ A simple getting started guide](https://nikolak.com/pyqt-qt-designer-getting-started/)
 
