@@ -37,6 +37,8 @@ plugins:
         read_until: 1646287200
       _releases:
         read_until: 1642677300
+    enabled_channels:
+    - _important
   discovery:
     upnpUuid: 7d61cbb7-f5c7-4221-949c-fd27225bf68e
   errortracking:
