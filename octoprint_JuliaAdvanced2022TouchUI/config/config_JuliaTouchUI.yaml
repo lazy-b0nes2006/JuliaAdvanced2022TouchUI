@@ -85,7 +85,7 @@ printerProfiles:
     heatedBed: true
     id: _default
     model: Fracktal Works Julia Series
-    name: Julia
+    name: Julia Advanced
     volume:
       custom_box: false
       depth: 250.0

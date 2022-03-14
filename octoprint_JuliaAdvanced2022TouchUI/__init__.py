@@ -37,7 +37,7 @@ del get_versions
 # 			self.is_running = False
 
 
-class JuliaTouchUI(octoprint.plugin.StartupPlugin):
+class JuliaAdvanced2022TouchUI(octoprint.plugin.StartupPlugin):
     def on_after_startup(self):
         # self.resetInetrval = int(self._settings.get(["resetInetrval"]))
         self._logger.info("TouchUI Plugin Started")
@@ -62,29 +62,29 @@ class JuliaTouchUI(octoprint.plugin.StartupPlugin):
 
     def get_update_information(self):
         return dict(
-            JuliaTouchUI=dict(
-                displayName="JuliaTouchUI",
+            JuliaAdvanced2022TouchUI=dict(
+                displayName="JuliaAdvanced2022TouchUI",
                 displayVersion=self._plugin_version,
                 # version check: github repository
                 type="github_release",
                 user="FracktalWorks",
-                repo="JuliaTouchUI",
+                repo="JuliaAdvanced2022TouchUI",
                 current=self._plugin_version,
 
                 # update method: pip
-                pip="https://github.com/FracktalWorks/JuliaTouchUI/archive/{target_version}.zip"
+                pip="https://github.com/FracktalWorks/JuliaAdvanced2022TouchUI/archive/{target_version}.zip"
             )
         )
 
 
-__plugin_name__ = "Julia  Touch UI"
+__plugin_name__ = "Julia Advanced 2022 Touch UI"
 __plugin_version__ = __version__
 __plugin_pythoncompat__ = ">=3,<4"
 
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = JuliaTouchUI()
+    __plugin_implementation__ = JuliaAdvanced2022TouchUI()
 
     global __plugin_hooks__
     __plugin_hooks__ = {

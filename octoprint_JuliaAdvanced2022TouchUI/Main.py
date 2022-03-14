@@ -13,7 +13,7 @@
 """
 Development = False   # set to True if running on any system other than RaspberryPi
 
-import mainGUI_julia
+import mainGUI_JuliaAdvanced2022TouchUI
 import keyboard
 import dialog
 import styles
@@ -105,9 +105,9 @@ filaments = [
 
 filaments = OrderedDict(filaments)
 
-calibrationPosition = {'X1': 193, 'Y1': 31,
-                       'X2': 48, 'Y2': 31,
-                       'X3': 120, 'Y3': 249
+calibrationPosition = {'X1': 163, 'Y1': 20,
+                       'X2': 32, 'Y2': 20,
+                       'X3': 97, 'Y3': 193
                        }
 
 try:
@@ -253,7 +253,7 @@ class ClickableLineEdit(QtWidgets.QLineEdit):
         self.clicked_signal.emit()
 
 
-class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
+class MainUiClass(QtWidgets.QMainWindow, mainGUI_JuliaAdvanced2022TouchUI.Ui_MainWindow):
     '''
     Main GUI Workhorse, all slots and events defined within
     The main implementation class that inherits methods, variables etc from mainGUI_julia.py and QMainWindow
