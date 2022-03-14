@@ -20,7 +20,7 @@ plugin_version = versioneer.get_version()   # replaced by versioneer
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """TouchScreen Plugin for Julia ABL based on Python3 and PyQt5"""
+plugin_description = """TouchScreen Plugin for Julia Advanced ABL based on Python3 and PyQt5"""
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
 plugin_author = "Fracktal Works"
