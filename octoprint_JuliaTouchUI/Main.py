@@ -827,7 +827,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
         updateAvailable = False
         self.performUpdateButton.setDisabled(True)
 
-        self.updateListWidget.addItem(self.getFirmwareVersion())
+        # Firmware version on the MKS https://github.com/FracktalWorks/OctoPrint-JuliaFirmwareUpdater
+        # self.updateListWidget.addItem(self.getFirmwareVersion())
 
         data = octopiclient.getSoftwareUpdateInfo()
         if data:
@@ -1716,10 +1717,11 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI_julia.Ui_MainWindow):
             os.system('sudo cp -f config/dhcpcd.conf /etc/dhcpcd.conf')
             os.system('sudo cp -f config/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf')
             os.system('sudo rm -rf /home/pi/.octoprint/users.yaml')
+            os.system('sudo cp -f config/users.yaml /home/pi/.octoprint/users.yaml')
             os.system('sudo rm -rf /home/pi/.octoprint/printerProfiles/*')
             os.system('sudo rm -rf /home/pi/.octoprint/scripts/gcode')
             os.system('sudo cp -f config/config_JuliaTouchUI.yaml /home/pi/.octoprint/config.yaml')
-            os.system('sudo rm -rf /home/pi/.fw_logo.dat')
+            # os.system('sudo rm -rf /home/pi/.fw_logo.dat')
             self.tellAndReboot("Settings restored. Rebooting...")
 
     def restorePrintDefaults(self):
