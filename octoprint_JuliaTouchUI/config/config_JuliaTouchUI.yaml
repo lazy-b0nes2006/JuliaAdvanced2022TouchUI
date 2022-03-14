@@ -98,7 +98,7 @@ serial:
   - /dev/ttyS*
 server:
   commands:
-    serverRestartCommand: sudo service octoprint restart
+    serverRestartCommand: sudo shutdown -r now
     systemRestartCommand: sudo shutdown -r now
     systemShutdownCommand: sudo shutdown -h now
   firstRun: false
