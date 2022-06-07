@@ -58,6 +58,8 @@ plugins:
   tracking:
     enabled: false
     unique_id: bca9adfe-4139-4ffe-901d-071386764f1b
+  firmware_check:
+    ignore_infos: true
   virtual_printer:
     _config_version: 1
     enabled: true
