@@ -1,7 +1,9 @@
-import RPi.GPIO as GPIO
 from decorators import run_async
 import time
 from config import Development
+
+if not Development:
+    import RPi.GPIO as GPIO
 
 
 class BuzzerFeedback(object):
