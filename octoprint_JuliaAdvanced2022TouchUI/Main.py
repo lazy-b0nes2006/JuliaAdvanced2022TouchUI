@@ -11,7 +11,7 @@
  * Licence: AGPLv3
 *************************************************************************
 """
-Development = False   # set to True if running on any system other than RaspberryPi
+Development = True   # set to True if running on any system other than RaspberryPi
 
 import mainGUI
 import keyboard
@@ -86,7 +86,7 @@ Testing:
 # ++++++++++++++++++++++++Global variables++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-ip = '0.0.0.0'
+ip = '192.168.0.20'
 apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
 filaments = [
@@ -1431,7 +1431,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.tool0TempBar.setStyleSheet(styles.bar_heater_heating)
         else:
             self.tool0TempBar.setMaximum(temperature['tool0Actual'])
-        self.tool0TempBar.setValue(temperature['tool0Actual'])
+        self.tool0TempBar.setValue(int(temperature['tool0Actual']))     #self.tool0TempBar.setValue(temperature['tool0Actual'])
         self.tool0ActualTemperature.setText(str(int(temperature['tool0Actual'])))  # + unichr(176)
         self.tool0TargetTemperature.setText(str(int(temperature['tool0Target'])))
 
@@ -1442,8 +1442,8 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.bedTempBar.setMaximum(temperature['bedTarget'])
             self.bedTempBar.setStyleSheet(styles.bar_heater_heating)
         else:
-            self.bedTempBar.setMaximum(temperature['bedActual'])
-        self.bedTempBar.setValue(temperature['bedActual'])
+            self.bedTempBar.setMaximum(int(temperature['bedActual']))       #self.bedTempBar.setMaximum(temperature['bedActual'])
+        self.bedTempBar.setValue(int(temperature['bedActual']))     #self.bedTempBar.setValue(temperature['bedActual'])
         self.bedActualTemperatute.setText(str(int(temperature['bedActual'])))  # + unichr(176))
         self.bedTargetTemperature.setText(str(int(temperature['bedTarget'])))  # + unichr(176))
 
