@@ -6,6 +6,8 @@ import time
 import os
 from network_utils import getIP
 
+octopiclient = ''
+
 class ThreadSanityCheck(QtCore.QThread):
 
     loaded_signal = QtCore.pyqtSignal()

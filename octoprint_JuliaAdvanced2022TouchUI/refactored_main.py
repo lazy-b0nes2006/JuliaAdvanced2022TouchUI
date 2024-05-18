@@ -1,5 +1,5 @@
 import sys
-from MainUIClass import MainUiClass
+from MainUIClass_def import MainUIClass
 from PyQt5 import QtWidgets
 
 #if not Development:
@@ -11,12 +11,11 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # Intialize the library (must be called once before other functions).
     # Creates an object of type MainUiClass
-    MainWindow = MainUiClass()
+    MainWindow = MainUIClass()
     MainWindow.show()
     # MainWindow.showFullScreen()
     # MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
     # Create NeoPixel object with appropriate configuration.
     # charm = FlickCharm()
     # charm.activateOn(MainWindow.FileListWidget)
-    print("hi")
 sys.exit(app.exec_())

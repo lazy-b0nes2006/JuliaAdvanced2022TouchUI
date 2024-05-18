@@ -1,6 +1,6 @@
-from threads import octopiclient
 from PyQt5 import QtGui
 from config import calibrationPosition
+from threads import octopiclient
 
 def getZHomeOffset(self, offset):
     '''
