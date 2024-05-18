@@ -6,9 +6,9 @@ from threads import *
 import styles
 from socket_qt import QtWebsocket
 
-from gui_elements_without_mainUI import ClickableLineEdit, Image
+from gui_elements import ClickableLineEdit
 
-from mainUI_class import door_lock, calibration, change_filament, control_screen, filament_sensor, firmware_ota_update, job_operations, network_display_config, print_restore, printer_status, qr_code, reboot, restore_defaults, start_keyboard
+from mainUI_class_functions import door_lock, calibration, change_filament, control_screen, filament_sensor, firmware_ota_update, job_operations, network_config, display_settings, print_restore, printer_status, pair_phone, reboot, restore_defaults, start_keyboard, error_handling
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
@@ -344,6 +344,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     #         self.pgLock_bt0.clicked.connect(lambda: self.Lock_kbAdd("0"))
     #         self.pgLock_btBackspace.clicked.connect(lambda: self.pgLock_pin.backspace())
     #         self.pgLock_btSubmit.clicked.connect(self.Lock_submitPIN)
+
         
 MainUIClass.Lock_showLock = door_lock.Lock_showLock
 MainUIClass.Lock_kbAdd = door_lock.Lock_kbAdd
@@ -357,4 +358,86 @@ MainUIClass.isFilamentSensorInstalled = filament_sensor.isFilamentSensorInstalle
 MainUIClass.filamentSensorHandler = filament_sensor.filamentSensorHandler
 MainUIClass.toggleFilamentSensor = filament_sensor.toggleFilamentSensor
 
-MainUIClass.firmwareUpdateCheck = firmware_ota_update.firmwareUpdateCheckfirmwareUpdateCheck
+MainUIClass.firmwareUpdateCheck = firmware_ota_update.firmwareUpdateCheck
+MainUIClass.firmwareUpdateStart = firmware_ota_update.firmwareUpdateStart
+MainUIClass.firmwareUpdateStartProgress = firmware_ota_update.firmwareUpdateStartProgress
+MainUIClass.firmwareUpdateProgress = firmware_ota_update.firmwareUpdateProgress
+MainUIClass.firmwareUpdateBack = firmware_ota_update.firmwareUpdateBack
+MainUIClass.firmwareUpdateHandler = firmware_ota_update.firmwareUpdateHandler
+
+MainUIClass.getFirmwareVersion = firmware_ota_update.getFirmwareVersion
+MainUIClass.displayVersionInfo = firmware_ota_update.displayVersionInfo
+MainUIClass.softwareUpdateResult = firmware_ota_update.softwareUpdateResult
+MainUIClass.softwareUpdateProgress = firmware_ota_update.softwareUpdateProgress
+MainUIClass.softwareUpdateProgressLog = firmware_ota_update.softwareUpdateProgressLog
+MainUIClass.updateFailed = firmware_ota_update.updateFailed
+MainUIClass.softwareUpdate = firmware_ota_update.softwareUpdate
+
+MainUIClass.touchCalibration = display_settings.touchCalibration
+MainUIClass.showRotateDisplaySettingsPage = display_settings.showRotateDisplaySettingsPage
+#MainUIClass.saveRotateDisplaySettings = display_settings.saveRotateDisplaySettings
+MainUIClass.saveRotateDisplaySettings = display_settings.saveRotateDisplaySettings
+
+MainUIClass.acceptWifiSettings = network_config.acceptWifiSettings
+MainUIClass.wifiReconnectResult = network_config.wifiReconnectResult
+MainUIClass.networkInfo = network_config.networkInfo
+MainUIClass.wifiSettings = network_config.wifiSettings
+MainUIClass.scan_wifi = network_config.scan_wifi
+MainUIClass.setIPStatus = network_config.setIPStatus
+
+MainUIClass.ethSettings = network_config.ethSettings
+MainUIClass.ethStaticChanged = network_config.ethStaticChanged
+MainUIClass.ethNetworkInfo = network_config.ethNetworkInfo
+MainUIClass.isIpErr = network_config.isIpErr
+MainUIClass.showIpErr = network_config.showIpErr
+MainUIClass.ethSaveStaticNetworkInfo = network_config.ethSaveStaticNetworkInfo
+MainUIClass.ethReconnectResult = network_config.ethReconnectResult
+MainUIClass.ethShowKeyboard = network_config.ethShowKeyboard
+
+MainUIClass.unloadFilament = change_filament.unloadFilament
+MainUIClass.loadFilament = change_filament.loadFilament
+MainUIClass.changeFilament = change_filament.changeFilament
+MainUIClass.changeFilamentCancel = change_filament.changeFilamentCancel
+
+MainUIClass.stopActionMessageBox = job_operations.stopActionMessageBox
+MainUIClass.playPauseAction = job_operations.playPauseAction
+MainUIClass.fileListLocal = job_operations.fileListLocal
+MainUIClass.fileListUSB = job_operations.fileListUSB
+MainUIClass.printSelectedLocal = job_operations.printSelectedLocal
+MainUIClass.printSelectedUSB = job_operations.printSelectedUSB
+MainUIClass.transferToLocal = job_operations.transferToLocal
+MainUIClass.printFile = job_operations.printFile
+MainUIClass.deleteItem = job_operations.deleteItem
+
+MainUIClass.updateTemperature = printer_status.updateTemperature
+MainUIClass.updatePrintStatus = printer_status.updatePrintStatus
+MainUIClass.updateStatus = printer_status.updateStatus
+
+MainUIClass.control = control_screen.control
+MainUIClass.setStep = control_screen.setStep
+MainUIClass.coolDownAction = control_screen.coolDownAction
+
+MainUIClass.getZHomeOffset = calibration.getZHomeOffset
+MainUIClass.setZHomeOffset = calibration.setZHomeOffset
+MainUIClass.nozzleOffset = calibration.nozzleOffset
+MainUIClass.quickStep1 = calibration.quickStep1
+MainUIClass.quickStep2 = calibration.quickStep2
+MainUIClass.quickStep3 = calibration.quickStep3
+MainUIClass.quickStep4 = calibration.quickStep4
+MainUIClass.quickStep5 = calibration.quickStep5
+#MainUIClass.quickStep6 = calibration.quickStep6
+MainUIClass.doneStep = calibration.doneStep
+MainUIClass.cancelStep = calibration.cancelStep
+
+MainUIClass.startKeyboard = start_keyboard.startKeyboard
+
+MainUIClass.restoreFactoryDefaults = restore_defaults.restoreFactoryDefaults
+MainUIClass.restorePrintDefaults = restore_defaults.restorePrintDefaults
+
+MainUIClass.tellAndReboot = reboot.tellAndReboot
+MainUIClass.askAndReboot = reboot.askAndReboot
+
+MainUIClass.handleStartupError = error_handling.handleStartupError
+
+MainUIClass.pairPhoneApp = pair_phone.pairPhoneApp
+

@@ -1,5 +1,5 @@
 import sys
-from gui_elements import MainUiClass
+from MainUIClass import MainUiClass
 from PyQt5 import QtWidgets
 
 #if not Development:
