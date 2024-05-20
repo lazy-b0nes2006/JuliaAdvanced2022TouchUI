@@ -3,6 +3,12 @@ import os
 import re
 import dialog
 
+def display_connections(self):
+    self.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
+    self.calibrateTouch.pressed.connect(self.touchCalibration)
+
+    self.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
+
 def touchCalibration(self):
     os.system('sudo /home/pi/setenv.sh')
 

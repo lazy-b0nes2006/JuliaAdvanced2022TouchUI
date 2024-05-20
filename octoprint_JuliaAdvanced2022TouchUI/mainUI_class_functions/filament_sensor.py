@@ -7,6 +7,8 @@ from threads import octopiclient
 def filament_sensor_connections(self):
     self.QtSocket.filament_sensor_triggered_signal.connect(self.filamentSensorHandler)
 
+    self.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
+
 def isFilamentSensorInstalled(self):
     success = False
     try:

@@ -1,6 +1,10 @@
 import keyboard
 from PyQt5 import QtCore
 
+def keyboard_connections(self):
+    self.wifiSettingsSSIDKeyboardButton.pressed.connect(
+        lambda: self.startKeyboard(self.wifiSettingsComboBox.addItem))
+
 def startKeyboard(self, returnFn, onlyNumeric=False, noSpace=False, text=""):
     '''
     starts the keyboard screen for entering Password

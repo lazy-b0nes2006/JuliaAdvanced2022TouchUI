@@ -16,6 +16,13 @@ def network_connections(self):
     self.networkInfoButton.pressed.connect(self.networkInfo)
     self.configureWifiButton.pressed.connect(self.wifiSettings)
     self.configureEthButton.pressed.connect(self.ethSettings)
+
+    self.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
+
+    self.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
+
+    self.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
+
     
 def acceptWifiSettings(self):
     wlan0_config_file = io.open("/etc/wpa_supplicant/wpa_supplicant.conf", "r+", encoding='utf8')

@@ -17,6 +17,8 @@ def updates_connections(self):
     self.OTAButton.pressed.connect(self.softwareUpdate)
     self.versionButton.pressed.connect(self.displayVersionInfo)
 
+    self.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
+
 
 def firmwareUpdateCheck(self):
     headers = {'X-Api-Key': apiKey}

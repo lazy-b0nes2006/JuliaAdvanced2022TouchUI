@@ -310,28 +310,32 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
 
         # WifiSetings page
-        self.wifiSettingsSSIDKeyboardButton.pressed.connect(
-            lambda: self.startKeyboard(self.wifiSettingsComboBox.addItem))
+
+        self.keyboard_connections()
+
+        # self.wifiSettingsSSIDKeyboardButton.pressed.connect(
+        #     lambda: self.startKeyboard(self.wifiSettingsComboBox.addItem))
         self.wifiSettingsCancelButton.pressed.connect(
             lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
-        self.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
+        # self.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
 
         # Ethernet setings page
-        self.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
+        # self.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
         # self.ethStaticCheckBox.stateChanged.connect(lambda: self.ethStaticSettings.setVisible(self.ethStaticCheckBox.isChecked()))
         self.ethStaticIpKeyboardButton.pressed.connect(lambda: self.ethShowKeyboard(self.ethStaticIpLineEdit))
         self.ethStaticGatewayKeyboardButton.pressed.connect(lambda: self.ethShowKeyboard(self.ethStaticGatewayLineEdit))
-        self.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
+        # self.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
         self.ethSettingsCancelButton.pressed.connect(
             lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
 
         # Display settings
-        self.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
-        self.calibrateTouch.pressed.connect(self.touchCalibration)
+        self.display_connections()
+        # self.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
+        # self.calibrateTouch.pressed.connect(self.touchCalibration)
         self.displaySettingsBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.settingsPage))
 
         # Rotate Display Settings
-        self.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
+        # self.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
         self.rotateDisplaySettingsCancelButton.pressed.connect(
             lambda: self.stackedWidget.setCurrentWidget(self.displaySettingsPage))
 
@@ -343,10 +347,10 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
 
         # Firmware update page
-        self.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
+        # self.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
 
         # Filament sensor toggle
-        self.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
+        # self.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
 
     #  # Lock settings
     #     if not Development:
