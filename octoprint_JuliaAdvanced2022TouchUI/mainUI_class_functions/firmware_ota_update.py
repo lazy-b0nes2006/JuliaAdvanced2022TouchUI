@@ -6,6 +6,18 @@ from PyQt5 import QtCore
 
 isFirmwareUpdateInProgress = False
 
+def updates_connections(self):
+    self.QtSocket.update_started_signal.connect(self.softwareUpdateProgress)
+    self.QtSocket.update_log_signal.connect(self.softwareUpdateProgressLog)
+    self.QtSocket.update_log_result_signal.connect(self.softwareUpdateResult)
+    self.QtSocket.update_failed_signal.connect(self.updateFailed)
+    self.QtSocket.connected_signal.connect(self.onServerConnected)
+    self.QtSocket.firmware_updater_signal.connect(self.firmwareUpdateHandler)
+
+    self.OTAButton.pressed.connect(self.softwareUpdate)
+    self.versionButton.pressed.connect(self.displayVersionInfo)
+
+
 def firmwareUpdateCheck(self):
     headers = {'X-Api-Key': apiKey}
     requests.get('http://{}/plugin/JuliaFirmwareUpdater/update/check'.format(ip), headers=headers)

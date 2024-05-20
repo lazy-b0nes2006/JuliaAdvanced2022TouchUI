@@ -7,6 +7,21 @@ from config import _fromUtf8
 import os
 from hurry.filesize import size
 
+def job_ops_connections(self):
+    self.stopButton.pressed.connect(self.stopActionMessageBox)
+    self.playPauseButton.clicked.connect(self.playPauseAction)
+
+    self.fileSelectedBackButton.pressed.connect(self.fileListLocal)
+    self.fileSelectedPrintButton.pressed.connect(self.printFile)
+    self.localStorageSelectButton.pressed.connect(self.printSelectedLocal)
+    self.localStorageDeleteButton.pressed.connect(self.deleteItem)
+    
+    self.USBStorageSelectButton.pressed.connect(self.printSelectedUSB)
+    self.USBStorageSaveButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
+    
+    self.fileSelectedUSBBackButton.pressed.connect(self.fileListUSB)
+    self.fileSelectedUSBTransferButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
+    self.fileSelectedUSBPrintButton.pressed.connect(lambda: self.transferToLocal(prnt=True))
 
 def stopActionMessageBox(self):
     '''

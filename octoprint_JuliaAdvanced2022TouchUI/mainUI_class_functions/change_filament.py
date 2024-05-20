@@ -1,6 +1,15 @@
 from threads import octopiclient
 from config import filaments
 
+def change_filament_connections(self):
+    self.changeFilamentButton.pressed.connect(self.changeFilament)
+    self.changeFilamentBackButton.pressed.connect(self.control)
+    self.changeFilamentBackButton2.pressed.connect(self.changeFilamentCancel)
+    self.changeFilamentUnloadButton.pressed.connect(lambda: self.unloadFilament())
+    self.changeFilamentLoadButton.pressed.connect(lambda: self.loadFilament())
+    self.loadDoneButton.pressed.connect(self.control)
+    self.unloadDoneButton.pressed.connect(self.changeFilament)
+    
 def unloadFilament(self):
     #Update
     if self.changeFilamentComboBox.findText("Loaded Filament") == -1:

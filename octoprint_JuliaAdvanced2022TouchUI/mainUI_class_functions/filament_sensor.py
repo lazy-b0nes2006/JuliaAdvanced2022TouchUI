@@ -4,6 +4,9 @@ from config import _fromUtf8, ip, apiKey
 import dialog
 from threads import octopiclient
 
+def filament_sensor_connections(self):
+    self.QtSocket.filament_sensor_triggered_signal.connect(self.filamentSensorHandler)
+
 def isFilamentSensorInstalled(self):
     success = False
     try:

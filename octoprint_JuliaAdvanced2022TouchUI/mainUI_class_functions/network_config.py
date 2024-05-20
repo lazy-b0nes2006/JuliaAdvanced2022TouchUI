@@ -8,6 +8,15 @@ from network_utils import *
 import time
 from decorators import run_async
 
+def network_connections(self):
+    self.wifiPasswordLineEdit.clicked_signal.connect(lambda: self.startKeyboard(self.wifiPasswordLineEdit.setText))
+    self.ethStaticIpLineEdit.clicked_signal.connect(lambda: self.ethShowKeyboard(self.ethStaticIpLineEdit))
+    self.ethStaticGatewayLineEdit.clicked_signal.connect(lambda: self.ethShowKeyboard(self.ethStaticGatewayLineEdit))
+
+    self.networkInfoButton.pressed.connect(self.networkInfo)
+    self.configureWifiButton.pressed.connect(self.wifiSettings)
+    self.configureEthButton.pressed.connect(self.ethSettings)
+    
 def acceptWifiSettings(self):
     wlan0_config_file = io.open("/etc/wpa_supplicant/wpa_supplicant.conf", "r+", encoding='utf8')
     wlan0_config_file.truncate()

@@ -3,6 +3,12 @@ import styles
 from config import _fromUtf8
 from PyQt5 import QtGui
 
+def printer_status_connections(self):
+    self.QtSocket.temperatures_signal.connect(self.updateTemperature)
+    self.QtSocket.print_status_signal.connect(self.updatePrintStatus)
+    self.QtSocket.status_signal.connect(self.updateStatus)
+
+
 def updateTemperature(self, temperature):
     '''
     Slot that gets a signal originating from the thread that keeps polling for printer status

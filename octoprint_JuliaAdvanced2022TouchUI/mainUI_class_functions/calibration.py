@@ -2,6 +2,45 @@ from PyQt5 import QtGui
 from config import calibrationPosition
 from threads import octopiclient
 
+def calibration_connections(self):
+    self.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
+
+    self.calibrateBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.MenuPage))
+    self.nozzleOffsetButton.pressed.connect(self.nozzleOffset)
+    # the -ve sign is such that its converted to home offset and not just distance between nozzle and bed
+    self.nozzleOffsetSetButton.pressed.connect(
+        lambda: self.setZHomeOffset(self.nozzleOffsetDoubleSpinBox.value(), True))
+    self.nozzleOffsetBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.calibratePage))
+    #Bypass calibration wizzard page for not using Klipper
+    # self.calibrationWizardButton.clicked.connect(
+    #     lambda: self.stackedWidget.setCurrentWidget(self.calibrationWizardPage))
+    self.calibrationWizardButton.clicked.connect(self.quickStep1)
+
+    self.calibrationWizardBackButton.clicked.connect(
+        lambda: self.stackedWidget.setCurrentWidget(self.calibratePage))
+    #required for Klipper
+    # self.quickCalibrationButton.clicked.connect(self.quickStep6)
+    # self.fullCalibrationButton.clicked.connect(self.quickStep1)
+
+    self.quickStep1NextButton.clicked.connect(self.quickStep2)
+    self.quickStep2NextButton.clicked.connect(self.quickStep3)
+    self.quickStep3NextButton.clicked.connect(self.quickStep4)
+    self.quickStep4NextButton.clicked.connect(self.quickStep5)
+    self.quickStep5NextButton.clicked.connect(self.doneStep)
+    # Required for Klipper
+    # self.quickStep5NextButton.clicked.connect(self.quickStep6)
+    # self.quickStep6NextButton.clicked.connect(self.doneStep)
+
+    # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
+    # self.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
+    self.quickStep1CancelButton.pressed.connect(self.cancelStep)
+    self.quickStep2CancelButton.pressed.connect(self.cancelStep)
+    self.quickStep3CancelButton.pressed.connect(self.cancelStep)
+    self.quickStep4CancelButton.pressed.connect(self.cancelStep)
+    self.quickStep5CancelButton.pressed.connect(self.cancelStep)
+    # self.quickStep6CancelButton.pressed.connect(self.cancelStep)
+
+
 def getZHomeOffset(self, offset):
     '''
     Sets the spinbox value to have the value of the Z offset from the printer.
