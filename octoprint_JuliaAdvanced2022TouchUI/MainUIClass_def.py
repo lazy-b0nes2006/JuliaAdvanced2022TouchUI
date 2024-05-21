@@ -8,7 +8,7 @@ from socket_qt import QtWebsocket
 
 from gui_elements import ClickableLineEdit
 
-from import_helper import load_and_assign_functions, load_classes
+from import_helper import load_classes
 
 from mainUI_classes.start_keyboard import startKeyboard
 
