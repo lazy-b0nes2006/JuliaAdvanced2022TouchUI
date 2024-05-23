@@ -8,7 +8,7 @@ from socket_qt import QtWebsocket
 
 from gui_elements import ClickableLineEdit
 
-from import_helper import load_classes
+from import_helper import load_classes      #used to import all classes at runtime
 
 from mainUI_classes import start_keyboard, printRestore, controlScreen, filamentSensor, printerStatus, homePage, menuPage, calibrationPage, socketConnections, getFilesAndInfo, printLocationScreen, changeFilamentRoutine, networkInfoPage, wifiSettingsPage, ethernetSettingsPage, networkSettingsPage, displaySettings, softwareUpdatePage, firmwareUpdatePage, settingsPage
 
@@ -22,12 +22,31 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
 
         # classes = load_classes('mainUI_classes')
         # globals().update(classes)
-        # Uncomment the above lines to import classes at run-time
+        # Uncomment the above lines to import classes at runtime
         
-        self.controlScreenInstance = controlScreen(self)
-        self.printRestoreInstance = printRestore(self)
+        self.controlScreenInstance = controlScreen.controlScreen(self)
+        self.printRestoreInstance = printRestore.printRestore(self)
         self.startKeyboard = start_keyboard.startKeyboard
 
+        self.printerStatusInstance = printerStatus.printerStatus(self)    
+        self.socketConnectionsInstance = socketConnections.socketConnections(self)
+        #Initialising all pages/screens
+        self.homePageInstance = homePage.homePage(self)
+        self.menuPageInstance = menuPage.menuPage(self)
+        self.calibrationPageInstance = calibrationPage.calibrationPage(self)
+        self.getFilesAndInfoInstance = getFilesAndInfo.getFilesAndInfo(self)
+        self.printLocationScreenInstance = printLocationScreen.printLocationScreen(self)
+        self.changeFilamentRoutineInstance = changeFilamentRoutine.changeFilamentRoutine(self)
+        self.networkInfoPageInstance = networkInfoPage.networkInfoPage(self)
+        self.wifiSettingsPageInstance = wifiSettingsPage.wifiSettingsPage(self)
+        self.ethernetSettingsPageInstance = ethernetSettingsPage.ethernetSettingsPage(self)
+        self.displaySettingsInstance = displaySettings.displaySettings(self)
+        self.softwareUpdatePageInstance = softwareUpdatePage.softwareUpdatePage(self)
+        self.firmwareUpdatePageInstance = firmwareUpdatePage.firmwareUpdatePage(self)
+        self.filamentSensorInstance = filamentSensor.filamentSensor(self)
+        self.settingsPageInstance = settingsPage.settingsPage(self)
+        self.networkSettingsPageInstance = networkSettingsPage.networkSettingsPage(self)
+ 
         if not Development:
             formatter = logging.Formatter("%(asctime)s %(message)s")
             self._logger = logging.getLogger("TouchUI")
@@ -125,7 +144,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         else:
             self.stackedWidget.setCurrentWidget(self.homePage)
 
-        filamentSensor.isFilamentSensorInstalled(self)
+        self.filamentSensorInstance.isFilamentSensorInstalled()
         self.printRestoreInstance.onServerConnected()
 
     def setActions(self):
@@ -134,25 +153,24 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         defines all the Slots and Button events.
         '''
 
-        self.printerStatusInstance = printerStatus(self)    
-        self.socketConnectionsInstance = socketConnections(self)
+        self.socketConnectionsInstance.connect()  
         #Initialising all pages/screens
-        self.homePageInstance = homePage(self)
-        self.menuPageInstance = menuPage(self)
-        self.calibrationPageInstance = calibrationPage(self)
-        self.getFilesAndInfoInstance = getFilesAndInfo(self)
-        self.printLocationScreenInstance = printLocationScreen(self)
-        self.controlScreenInstance.initialise(self)
-        self.changeFilamentRoutineInstance = changeFilamentRoutine(self)
-        self.networkInfoPageInstance = networkInfoPage(self)
-        self.wifiSettingsPageInstance = wifiSettingsPage(self)
-        self.ethernetSettingsPageInstance = ethernetSettingsPage(self)
-        self.displaySettingsInstance = displaySettings(self)
-        self.softwareUpdatePageInstance = softwareUpdatePage(self)
-        self.firmwareUpdatePageInstance = firmwareUpdatePage(self)
-        self.filamentSensorInstance = filamentSensor(self)
-        self.settingsPageInstance = settingsPage(self)
-        self.networkSettingsPageInstance = networkSettingsPage(self)
+        self.homePageInstance.connect()  
+        self.menuPageInstance.connect()  
+        self.calibrationPageInstance.connect()  
+        self.getFilesAndInfoInstance.connect()  
+        self.printLocationScreenInstance.connect()  
+        self.controlScreenInstance.connect()
+        self.changeFilamentRoutineInstance.connect()
+        self.networkInfoPageInstance.connect()
+        self.wifiSettingsPageInstance.connect()
+        self.ethernetSettingsPageInstance.connect()
+        self.displaySettingsInstance.connect()
+        self.softwareUpdatePageInstance.connect()
+        self.firmwareUpdatePageInstance.connect()
+        self.filamentSensorInstance.connect()
+        self.settingsPageInstance.connect()
+        self.networkSettingsPageInstance.connect()
  
         #  # Lock settings
         #     if not Development:

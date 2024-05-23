@@ -4,20 +4,21 @@ class lockSettings:
     def __init__(self, obj):
         self.obj = obj
 
-        obj.pgLock_pin.textChanged.connect(self.Lock_onPinInputChanged)
+    def connect(self):
+        self.obj.pgLock_pin.textChanged.connect(self.Lock_onPinInputChanged)
 
-        obj.pgLock_bt1.clicked.connect(lambda: self.Lock_kbAdd("1"))
-        obj.pgLock_bt2.clicked.connect(lambda: self.Lock_kbAdd("2"))
-        obj.pgLock_bt3.clicked.connect(lambda: self.Lock_kbAdd("3"))
-        obj.pgLock_bt4.clicked.connect(lambda: self.Lock_kbAdd("4"))
-        obj.pgLock_bt5.clicked.connect(lambda: self.Lock_kbAdd("5"))
-        obj.pgLock_bt6.clicked.connect(lambda: self.Lock_kbAdd("6"))
-        obj.pgLock_bt7.clicked.connect(lambda: self.Lock_kbAdd("7"))
-        obj.pgLock_bt8.clicked.connect(lambda: self.Lock_kbAdd("8"))
-        obj.pgLock_bt9.clicked.connect(lambda: self.Lock_kbAdd("9"))
-        obj.pgLock_bt0.clicked.connect(lambda: self.Lock_kbAdd("0"))
-        obj.pgLock_btBackspace.clicked.connect(lambda: obj.pgLock_pin.backspace())
-        obj.pgLock_btSubmit.clicked.connect(self.Lock_submitPIN)
+        self.obj.pgLock_bt1.clicked.connect(lambda: self.Lock_kbAdd("1"))
+        self.obj.pgLock_bt2.clicked.connect(lambda: self.Lock_kbAdd("2"))
+        self.obj.pgLock_bt3.clicked.connect(lambda: self.Lock_kbAdd("3"))
+        self.obj.pgLock_bt4.clicked.connect(lambda: self.Lock_kbAdd("4"))
+        self.obj.pgLock_bt5.clicked.connect(lambda: self.Lock_kbAdd("5"))
+        self.obj.pgLock_bt6.clicked.connect(lambda: self.Lock_kbAdd("6"))
+        self.obj.pgLock_bt7.clicked.connect(lambda: self.Lock_kbAdd("7"))
+        self.obj.pgLock_bt8.clicked.connect(lambda: self.Lock_kbAdd("8"))
+        self.obj.pgLock_bt9.clicked.connect(lambda: self.Lock_kbAdd("9"))
+        self.obj.pgLock_bt0.clicked.connect(lambda: self.Lock_kbAdd("0"))
+        self.obj.pgLock_btBackspace.clicked.connect(lambda: self.obj.pgLock_pin.backspace())
+        self.obj.pgLock_btSubmit.clicked.connect(self.Lock_submitPIN)
 
     def Lock_showLock(self):
         self.obj.pgLock_HID.setText(str(self.obj.__packager.hc()))

@@ -7,12 +7,15 @@ import re
 
 class ethernetSettingsPage:
     def __init__(self, obj):
-        obj.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
-        obj.ethStaticCheckBox.stateChanged.connect(lambda: obj.ethStaticSettings.setVisible(obj.ethStaticCheckBox.isChecked()))
-        obj.ethStaticIpKeyboardButton.pressed.connect(lambda: obj.ethShowKeyboard(obj.ethStaticIpLineEdit))
-        obj.ethStaticGatewayKeyboardButton.pressed.connect(lambda: obj.ethShowKeyboard(obj.ethStaticGatewayLineEdit))
-        obj.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
-        obj.ethSettingsCancelButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.networkSettingsPage))
+        self.obj = obj
+
+    def connect(self):
+        self.obj.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
+        self.obj.ethStaticCheckBox.stateChanged.connect(lambda: self.obj.ethStaticSettings.setVisible(self.obj.ethStaticCheckBox.isChecked()))
+        self.obj.ethStaticIpKeyboardButton.pressed.connect(lambda: self.obj.ethShowKeyboard(self.obj.ethStaticIpLineEdit))
+        self.obj.ethStaticGatewayKeyboardButton.pressed.connect(lambda: self.obj.ethShowKeyboard(self.obj.ethStaticGatewayLineEdit))
+        self.obj.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
+        self.obj.ethSettingsCancelButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage))
 
     def ethSettings(self):
         self.obj.stackedWidget.setCurrentWidget(self.obj.ethSettingsPage)

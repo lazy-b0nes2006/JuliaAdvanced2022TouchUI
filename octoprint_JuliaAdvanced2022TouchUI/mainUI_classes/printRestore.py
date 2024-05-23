@@ -21,7 +21,7 @@ class printRestore:
             octoprintAPI.restore(restore=False)
 
     def onServerConnected(self):
-        filamentSensor.isFilamentSensorInstalled(self.obj)
+        self.obj.filamentSensorInstance.isFilamentSensorInstalled()
         # if not self.__timelapse_enabled:
         #     return
         # if self.__timelapse_started:

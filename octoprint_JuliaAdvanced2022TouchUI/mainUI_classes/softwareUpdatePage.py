@@ -7,8 +7,10 @@ from threads import octopiclient
 class softwareUpdatePage:
     def __init__(self, obj):
         self.obj = obj
-        obj.softwareUpdateBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.settingsPage))
-        obj.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
+
+    def connect(self):
+        self.obj.softwareUpdateBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage))
+        self.obj.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
 
     ''' +++++++++++++++++++++++++++++++++OTA Update+++++++++++++++++++++++++++++++++++ '''
 

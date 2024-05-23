@@ -8,7 +8,9 @@ class firmwareUpdatePage:
 
     def __init__(self, obj):
         self.obj = obj
-        obj.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
+
+    def connect(self):
+        self.obj.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
 
     def firmwareUpdateCheck(self):
         headers = {'X-Api-Key': apiKey}

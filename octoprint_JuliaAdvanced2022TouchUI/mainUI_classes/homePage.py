@@ -6,10 +6,12 @@ from threads import octopiclient
 class homePage:
     def __init__(self, obj):
         self.obj = obj
-        obj.stopButton.pressed.connect(self.stopActionMessageBox)
-        obj.menuButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.MenuPage))
-        obj.controlButton.pressed.connect(obj.controlScreenInstance.control)
-        obj.playPauseButton.clicked.connect(self.playPauseAction)
+
+    def connect(self):
+        self.obj.stopButton.pressed.connect(self.stopActionMessageBox)
+        self.obj.menuButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.MenuPage))
+        self.obj.controlButton.pressed.connect(self.obj.controlScreenInstance.control)
+        self.obj.playPauseButton.clicked.connect(self.playPauseAction)
 
     def tellAndReboot(self, msg="Rebooting...", overlay=True):
         if dialog.WarningOk(self.obj, msg, overlay=overlay):

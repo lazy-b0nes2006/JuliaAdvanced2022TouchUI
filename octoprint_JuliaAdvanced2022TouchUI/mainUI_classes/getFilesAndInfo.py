@@ -10,32 +10,33 @@ class getFilesAndInfo:
     def __init__(self, obj):
         self.obj = obj
 
-        #fileListUSBPage
-        obj.USBStorageBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.printLocationPage))
-        obj.USBStorageScrollUp.pressed.connect(
-            lambda: obj.fileListWidgetUSB.setCurrentRow(obj.fileListWidgetUSB.currentRow() - 1))
-        obj.USBStorageScrollDown.pressed.connect(
-            lambda: obj.fileListWidgetUSB.setCurrentRow(obj.fileListWidgetUSB.currentRow() + 1))
-        obj.USBStorageSelectButton.pressed.connect(self.printSelectedUSB)
-        obj.USBStorageSaveButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
+    def connect(self):
+        # fileListUSBPage
+        self.obj.USBStorageBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.printLocationPage))
+        self.obj.USBStorageScrollUp.pressed.connect(
+            lambda: self.obj.fileListWidgetUSB.setCurrentRow(self.obj.fileListWidgetUSB.currentRow() - 1))
+        self.obj.USBStorageScrollDown.pressed.connect(
+            lambda: self.obj.fileListWidgetUSB.setCurrentRow(self.obj.fileListWidgetUSB.currentRow() + 1))
+        self.obj.USBStorageSelectButton.pressed.connect(self.printSelectedUSB)
+        self.obj.USBStorageSaveButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
 
-        #fileListLocalScreen
-        obj.localStorageBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.printLocationPage))
-        obj.localStorageScrollUp.pressed.connect(
-            lambda: obj.fileListWidget.setCurrentRow(obj.fileListWidget.currentRow() - 1))
-        obj.localStorageScrollDown.pressed.connect(
-            lambda: obj.fileListWidget.setCurrentRow(obj.fileListWidget.currentRow() + 1))
-        obj.localStorageSelectButton.pressed.connect(self.printSelectedLocal)
-        obj.localStorageDeleteButton.pressed.connect(self.deleteItem)
+        # fileListLocalScreen
+        self.obj.localStorageBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.printLocationPage))
+        self.obj.localStorageScrollUp.pressed.connect(
+            lambda: self.obj.fileListWidget.setCurrentRow(self.obj.fileListWidget.currentRow() - 1))
+        self.obj.localStorageScrollDown.pressed.connect(
+            lambda: self.obj.fileListWidget.setCurrentRow(self.obj.fileListWidget.currentRow() + 1))
+        self.obj.localStorageSelectButton.pressed.connect(self.printSelectedLocal)
+        self.obj.localStorageDeleteButton.pressed.connect(self.deleteItem)
 
-        #selectedFileLocalScreen
-        obj.fileSelectedBackButton.pressed.connect(self.fileListLocal)
-        obj.fileSelectedPrintButton.pressed.connect(self.printFile)
+        # selectedFileLocalScreen
+        self.obj.fileSelectedBackButton.pressed.connect(self.fileListLocal)
+        self.obj.fileSelectedPrintButton.pressed.connect(self.printFile)
 
         # selectedFile USB Screen
-        obj.fileSelectedUSBBackButton.pressed.connect(self.fileListUSB)
-        obj.fileSelectedUSBTransferButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
-        obj.fileSelectedUSBPrintButton.pressed.connect(lambda: self.transferToLocal(prnt=True))
+        self.obj.fileSelectedUSBBackButton.pressed.connect(self.fileListUSB)
+        self.obj.fileSelectedUSBTransferButton.pressed.connect(lambda: self.transferToLocal(prnt=False))
+        self.obj.fileSelectedUSBPrintButton.pressed.connect(lambda: self.transferToLocal(prnt=True))
 
     def fileListLocal(self):
         '''

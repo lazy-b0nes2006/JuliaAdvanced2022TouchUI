@@ -4,15 +4,17 @@ from config import filaments
 class changeFilamentRoutine:
     def __init__(self, obj):
         self.obj = obj
-        obj.changeFilamentButton.pressed.connect(self.changeFilament)
-        obj.changeFilamentBackButton.pressed.connect(obj.controlScreenInstance.control)
-        obj.changeFilamentBackButton2.pressed.connect(self.changeFilamentCancel)
-        obj.changeFilamentUnloadButton.pressed.connect(lambda: self.unloadFilament())
-        obj.changeFilamentLoadButton.pressed.connect(lambda: self.loadFilament())
-        obj.loadDoneButton.pressed.connect(obj.controlScreenInstance.control)
-        obj.unloadDoneButton.pressed.connect(self.changeFilament)
-        obj.retractFilamentButton.pressed.connect(lambda: octopiclient.extrude(-20))
-        obj.ExtrudeButton.pressed.connect(lambda: octopiclient.extrude(20))
+
+    def connect(self):
+        self.obj.changeFilamentButton.pressed.connect(self.changeFilament)
+        self.obj.changeFilamentBackButton.pressed.connect(self.obj.controlScreenInstance.control)
+        self.obj.changeFilamentBackButton2.pressed.connect(self.changeFilamentCancel)
+        self.obj.changeFilamentUnloadButton.pressed.connect(lambda: self.unloadFilament())
+        self.obj.changeFilamentLoadButton.pressed.connect(lambda: self.loadFilament())
+        self.obj.loadDoneButton.pressed.connect(self.obj.controlScreenInstance.control)
+        self.obj.unloadDoneButton.pressed.connect(self.changeFilament)
+        self.obj.retractFilamentButton.pressed.connect(lambda: octopiclient.extrude(-20))
+        self.obj.ExtrudeButton.pressed.connect(lambda: octopiclient.extrude(20))
 
     def unloadFilament(self):
         # Update

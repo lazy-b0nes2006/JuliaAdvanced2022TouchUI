@@ -8,15 +8,16 @@ class displaySettings:
     def __init__(self, obj):
         self.obj = obj
 
+    def connect(self):
         # Display settings
-        obj.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
-        obj.calibrateTouch.pressed.connect(self.touchCalibration)
-        obj.displaySettingsBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.settingsPage))
+        self.obj.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
+        self.obj.calibrateTouch.pressed.connect(self.touchCalibration)
+        self.obj.displaySettingsBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage))
 
         # Rotate Display Settings
-        obj.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
-        obj.rotateDisplaySettingsCancelButton.pressed.connect(
-            lambda: obj.stackedWidget.setCurrentWidget(obj.displaySettingsPage))
+        self.obj.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
+        self.obj.rotateDisplaySettingsCancelButton.pressed.connect(
+            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.displaySettingsPage))
 
     def touchCalibration(self):
         os.system('sudo /home/pi/setenv.sh')

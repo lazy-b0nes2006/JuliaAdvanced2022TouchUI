@@ -8,20 +8,22 @@ import os
 class settingsPage:
     def __init__(self, obj):
         self.obj = obj
-        obj.networkSettingsButton.pressed.connect(
-            lambda: obj.stackedWidget.setCurrentWidget(obj.networkSettingsPage))
-        obj.displaySettingsButton.pressed.connect(
-            lambda: obj.stackedWidget.setCurrentWidget(obj.displaySettingsPage))
-        obj.settingsBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.MenuPage))
-        obj.pairPhoneButton.pressed.connect(self.pairPhoneApp)
-        obj.OTAButton.pressed.connect(obj.softwareUpdatePageInstance.softwareUpdate)
-        obj.versionButton.pressed.connect(obj.softwareUpdatePageInstance.displayVersionInfo)
 
-        obj.restartButton.pressed.connect(obj.homePageInstance.askAndReboot)
-        obj.restoreFactoryDefaultsButton.pressed.connect(self.restoreFactoryDefaults)
-        obj.restorePrintSettingsButton.pressed.connect(self.restorePrintDefaults)
+    def connect(self):
+        self.obj.networkSettingsButton.pressed.connect(
+            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage))
+        self.obj.displaySettingsButton.pressed.connect(
+            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.displaySettingsPage))
+        self.obj.settingsBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.MenuPage))
+        self.obj.pairPhoneButton.pressed.connect(self.pairPhoneApp)
+        self.obj.OTAButton.pressed.connect(self.obj.softwareUpdatePageInstance.softwareUpdate)
+        self.obj.versionButton.pressed.connect(self.obj.softwareUpdatePageInstance.displayVersionInfo)
 
-        obj.QRCodeBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.settingsPage))
+        self.obj.restartButton.pressed.connect(self.obj.homePageInstance.askAndReboot)
+        self.obj.restoreFactoryDefaultsButton.pressed.connect(self.restoreFactoryDefaults)
+        self.obj.restorePrintSettingsButton.pressed.connect(self.restorePrintDefaults)
+
+        self.obj.QRCodeBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage))
 
     def pairPhoneApp(self):
         if getIP(ThreadRestartNetworking.ETH) is not None:

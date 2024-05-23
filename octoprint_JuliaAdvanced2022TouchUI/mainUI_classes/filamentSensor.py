@@ -7,11 +7,11 @@ from threads import octopiclient
 class filamentSensor:
     def __init__(self, obj):
         self.obj = obj
-        self.toggleFilamentSensorButton = obj.toggleFilamentSensorButton
-        obj.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
 
-    @classmethod
-    def isFilamentSensorInstalled(self, obj):
+    def connect(self):
+        self.obj.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
+
+    def isFilamentSensorInstalled(self):
         success = False
         try:
             headers = {'X-Api-Key': apiKey}
@@ -19,7 +19,7 @@ class filamentSensor:
             success = req.status_code == requests.codes.ok
         except:
             pass
-        obj.toggleFilamentSensorButton.setEnabled(success)
+        self.obj.toggleFilamentSensorButton.setEnabled(success)
         return success
 
     def toggleFilamentSensor(self):
@@ -33,7 +33,7 @@ class filamentSensor:
             sensor_enabled = data["sensor_enabled"] == 1
 
         icon = 'filamentSensorOn' if sensor_enabled else 'filamentSensorOff'
-        self.toggleFilamentSensorButton.setIcon(QtGui.QIcon(_fromUtf8("templates/img/" + icon)))
+        self.obj.toggleFilamentSensorButton.setIcon(QtGui.QIcon(_fromUtf8("templates/img/" + icon)))
 
         if not sensor_enabled:
             return

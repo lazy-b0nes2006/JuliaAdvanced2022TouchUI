@@ -5,42 +5,45 @@ from threads import octopiclient
 class calibrationPage:
     def __init__(self, obj):
         self.obj = obj
-        obj.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
 
-        obj.calibrateBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.MenuPage))
-        obj.nozzleOffsetButton.pressed.connect(self.nozzleOffset)
+    def connect(self):
+        self.obj.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
+
+        self.obj.calibrateBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.MenuPage))
+        self.obj.nozzleOffsetButton.pressed.connect(self.nozzleOffset)
         # the -ve sign is such that its converted to home offset and not just distance between nozzle and bed
-        obj.nozzleOffsetSetButton.pressed.connect(
-            lambda: obj.setZHomeOffset(self.nozzleOffsetDoubleSpinBox.value(), True))
-        obj.nozzleOffsetBackButton.pressed.connect(lambda: obj.stackedWidget.setCurrentWidget(obj.calibratePage))
-        #Bypass calibration wizzard page for not using Klipper
-        # self.calibrationWizardButton.clicked.connect(
-        #     lambda: self.stackedWidget.setCurrentWidget(obj.calibrationWizardPage))
-        obj.calibrationWizardButton.clicked.connect(self.quickStep1)
+        self.obj.nozzleOffsetSetButton.pressed.connect(
+            lambda: self.setZHomeOffset(self.obj.nozzleOffsetDoubleSpinBox.value(), True))
+        self.obj.nozzleOffsetBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage))
+        # Bypass calibration wizzard page for not using Klipper
+        # self.obj.calibrationWizardButton.clicked.connect(
+        #     lambda: self.stackedWidget.setCurrentWidget(self.obj.calibrationWizardPage))
+        self.obj.calibrationWizardButton.clicked.connect(self.quickStep1)
 
-        obj.calibrationWizardBackButton.clicked.connect(
-            lambda: obj.stackedWidget.setCurrentWidget(obj.calibratePage))
-        #required for Klipper
-        # obj.quickCalibrationButton.clicked.connect(obj.quickStep6)
-        # obj.fullCalibrationButton.clicked.connect(obj.quickStep1)
+        self.obj.calibrationWizardBackButton.clicked.connect(
+            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage))
+        # required for Klipper
+        # self.obj.quickCalibrationButton.clicked.connect(self.obj.quickStep6)
+        # self.obj.fullCalibrationButton.clicked.connect(self.quickStep1)
 
-        obj.quickStep1NextButton.clicked.connect(self.quickStep2)
-        obj.quickStep2NextButton.clicked.connect(self.quickStep3)
-        obj.quickStep3NextButton.clicked.connect(self.quickStep4)
-        obj.quickStep4NextButton.clicked.connect(self.quickStep5)
-        obj.quickStep5NextButton.clicked.connect(self.doneStep)
+        self.obj.quickStep1NextButton.clicked.connect(self.quickStep2)
+        self.obj.quickStep2NextButton.clicked.connect(self.quickStep3)
+        self.obj.quickStep3NextButton.clicked.connect(self.quickStep4)
+        self.obj.quickStep4NextButton.clicked.connect(self.quickStep5)
+        self.obj.quickStep5NextButton.clicked.connect(self.doneStep)
         # Required for Klipper
-        # obj.quickStep5NextButton.clicked.connect(self.quickStep6)
-        # obj.quickStep6NextButton.clicked.connect(self.doneStep)
+        # self.obj.quickStep5NextButton.clicked.connect(self.quickStep6)
+        # self.obj.quickStep6NextButton.clicked.connect(self.doneStep)
 
-        # obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
-        # obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
-        obj.quickStep1CancelButton.pressed.connect(self.cancelStep)
-        obj.quickStep2CancelButton.pressed.connect(self.cancelStep)
-        obj.quickStep3CancelButton.pressed.connect(self.cancelStep)
-        obj.quickStep4CancelButton.pressed.connect(self.cancelStep)
-        obj.quickStep5CancelButton.pressed.connect(self.cancelStep)
-        # obj.quickStep6CancelButton.pressed.connect(self.cancelStep)
+        # self.obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
+        # self.obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
+        self.obj.quickStep1CancelButton.pressed.connect(self.cancelStep)
+        self.obj.quickStep2CancelButton.pressed.connect(self.cancelStep)
+        self.obj.quickStep3CancelButton.pressed.connect(self.cancelStep)
+        self.obj.quickStep4CancelButton.pressed.connect(self.cancelStep)
+        self.obj.quickStep5CancelButton.pressed.connect(self.cancelStep)
+        # self.obj.quickStep6CancelButton.pressed.connect(self.cancelStep)
+
 
     def getZHomeOffset(self, offset):
         '''

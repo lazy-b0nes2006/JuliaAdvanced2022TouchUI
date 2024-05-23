@@ -10,11 +10,13 @@ from decorators import run_async
 class wifiSettingsPage:
     def __init__(self, obj):
         self.obj = obj
-        obj.wifiSettingsSSIDKeyboardButton.pressed.connect(
-            lambda: obj.startKeyboard(obj.wifiSettingsComboBox.addItem))
-        obj.wifiSettingsCancelButton.pressed.connect(
-            lambda: obj.stackedWidget.setCurrentWidget(obj.networkSettingsPage))
-        obj.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
+
+    def connect(self):
+        self.obj.wifiSettingsSSIDKeyboardButton.pressed.connect(
+            lambda: self.obj.startKeyboard(self.obj.wifiSettingsComboBox.addItem))
+        self.obj.wifiSettingsCancelButton.pressed.connect(
+            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage))
+        self.obj.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
 
     def acceptWifiSettings(self):
         wlan0_config_file = io.open("/etc/wpa_supplicant/wpa_supplicant.conf", "r+", encoding='utf8')
