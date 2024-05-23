@@ -24,19 +24,20 @@ def load_classes(directory):
             module_name = filename[:-3]
             file_path = os.path.join(directory, filename)
             
-            print(f"Processing file: {file_path}")
+            #print(f"Processing file: {file_path}")
             
             try:
                 spec = importlib.util.spec_from_file_location(module_name, file_path)
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
-                print(f"Successfully loaded module: {module_name}")
+                #print(f"Successfully loaded module: {module_name}")
                 
                 for name, obj in module.__dict__.items():
                     if isinstance(obj, type):
                         classes[name] = obj
-                        print(f"Found class: {name} in module: {module_name}")
+                        #print(f"Found class: {name} in module: {module_name}")
             except Exception as e:
-                print(f"Failed to load module {module_name}: {e}")
+                pass
+                #print(f"Failed to load module {module_name}: {e}")
     
     return classes

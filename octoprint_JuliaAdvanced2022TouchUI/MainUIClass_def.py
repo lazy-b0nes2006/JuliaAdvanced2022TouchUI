@@ -10,7 +10,7 @@ from gui_elements import ClickableLineEdit
 
 from import_helper import load_classes
 
-from mainUI_classes.start_keyboard import startKeyboard
+from mainUI_classes import start_keyboard, printRestore, controlScreen, filamentSensor, printerStatus, homePage, menuPage, calibrationPage, socketConnections, getFilesAndInfo, printLocationScreen, changeFilamentRoutine, networkInfoPage, wifiSettingsPage, ethernetSettingsPage, networkSettingsPage, displaySettings, softwareUpdatePage, firmwareUpdatePage, settingsPage
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
@@ -21,9 +21,10 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         super(MainUIClass, self).__init__()
         classes = load_classes('mainUI_classes')
         globals().update(classes)
+        
         self.controlScreenInstance = controlScreen(self)
         self.printRestoreInstance = printRestore(self)
-        self.startKeyboard = startKeyboard
+        self.startKeyboard = start_keyboard.startKeyboard
 
         if not Development:
             formatter = logging.Formatter("%(asctime)s %(message)s")
