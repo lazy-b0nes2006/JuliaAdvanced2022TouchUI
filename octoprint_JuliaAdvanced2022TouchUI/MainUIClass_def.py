@@ -19,8 +19,10 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         This method gets called when an object of type MainUIClass is defined
         '''
         super(MainUIClass, self).__init__()
-        classes = load_classes('mainUI_classes')
-        globals().update(classes)
+
+        # classes = load_classes('mainUI_classes')
+        # globals().update(classes)
+        # Uncomment the above lines to import classes at run-time
         
         self.controlScreenInstance = controlScreen(self)
         self.printRestoreInstance = printRestore(self)
