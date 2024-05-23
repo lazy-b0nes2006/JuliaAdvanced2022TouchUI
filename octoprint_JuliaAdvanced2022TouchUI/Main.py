@@ -1439,7 +1439,7 @@ class MainUiClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.bedTempBar.setMaximum(150)
             self.bedTempBar.setStyleSheet(styles.bar_heater_cold)
         elif temperature['bedActual'] <= temperature['bedTarget']:
-            self.bedTempBar.setMaximum(temperature['bedTarget'])
+            self.bedTempBar.setMaximum(int(temperature['bedTarget']))
             self.bedTempBar.setStyleSheet(styles.bar_heater_heating)
         else:
             self.bedTempBar.setMaximum(int(temperature['bedActual']))       #self.bedTempBar.setMaximum(temperature['bedActual'])
