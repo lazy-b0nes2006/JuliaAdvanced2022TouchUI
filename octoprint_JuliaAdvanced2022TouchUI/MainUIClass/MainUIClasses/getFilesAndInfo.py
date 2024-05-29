@@ -167,8 +167,8 @@ class getFilesAndInfo:
 
         file = '/media/usb0/' + str(self.fileListWidgetUSB.currentItem().text())
 
-        self.uploadThread = ThreadFileUpload(file, prnt=prnt)
-        self.uploadThread.start()
+        self.MainUIObj.uploadThread = ThreadFileUpload(file, prnt=prnt)
+        self.MainUIObj.uploadThread.start()
         if prnt:
             self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.homePage)
 

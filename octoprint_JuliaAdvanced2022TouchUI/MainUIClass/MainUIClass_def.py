@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtGui
-from MainUIClass.MainUIClasses import changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
+from MainUIClass.MainUIClasses import idexConfig, changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
 import mainGUI
 from MainUIClass.config import Development, _fromUtf8
 import logging
@@ -13,11 +13,13 @@ from MainUIClass.import_helper import load_classes      #used to import all clas
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
-    def __init__(self):
+    def __init__(self, idex):
         '''
         This method gets called when an object of type MainUIClass is defined
         '''
         super(MainUIClass, self).__init__()
+
+        self.idex = idex
 
         # classes = load_classes('mainUI_classes')
         # globals().update(classes)
@@ -45,7 +47,10 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.filamentSensorInstance = filamentSensor.filamentSensor(self)
         self.settingsPageInstance = settingsPage.settingsPage(self)
         self.networkSettingsPageInstance = networkSettingsPage.networkSettingsPage(self)
- 
+
+        if self.idex:
+            self.idexConfigInstance = idexConfig.idexConfig(self)
+            
         if not Development:
             formatter = logging.Formatter("%(asctime)s %(message)s")
             self._logger = logging.getLogger("TouchUI")
