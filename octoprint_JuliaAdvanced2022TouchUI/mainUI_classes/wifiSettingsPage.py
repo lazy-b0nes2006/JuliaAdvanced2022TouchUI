@@ -8,73 +8,73 @@ import time
 from decorators import run_async
 
 class wifiSettingsPage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.wifiSettingsSSIDKeyboardButton.pressed.connect(
-            lambda: self.obj.startKeyboard(self.obj.wifiSettingsComboBox.addItem))
-        self.obj.wifiSettingsCancelButton.pressed.connect(
-            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage))
-        self.obj.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
+        self.MainUIObj.wifiSettingsSSIDKeyboardButton.pressed.connect(
+            lambda: self.MainUIObj.startKeyboard(self.MainUIObj.wifiSettingsComboBox.addItem))
+        self.MainUIObj.wifiSettingsCancelButton.pressed.connect(
+            lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.networkSettingsPage))
+        self.MainUIObj.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
 
     def acceptWifiSettings(self):
         wlan0_config_file = io.open("/etc/wpa_supplicant/wpa_supplicant.conf", "r+", encoding='utf8')
         wlan0_config_file.truncate()
-        ascii_ssid = self.obj.wifiSettingsComboBox.currentText()
+        ascii_ssid = self.MainUIObj.wifiSettingsComboBox.currentText()
         # unicode_ssid = ascii_ssid.decode('string_escape').decode('utf-8')
         wlan0_config_file.write(u"country=IN\n")
         wlan0_config_file.write(u"ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n")
         wlan0_config_file.write(u"update_config=1\n")
         wlan0_config_file.write(u"network={\n")
         wlan0_config_file.write(u'ssid="' + str(ascii_ssid) + '"\n')
-        if self.obj.hiddenCheckBox.isChecked():
+        if self.MainUIObj.hiddenCheckBox.isChecked():
             wlan0_config_file.write(u'scan_ssid=1\n')
         # wlan0_config_file.write(u"scan_ssid=1\n")
-        if str(self.obj.wifiPasswordLineEdit.text()) != "":
-            wlan0_config_file.write(u'psk="' + str(self.obj.wifiPasswordLineEdit.text()) + '"\n')
+        if str(self.MainUIObj.wifiPasswordLineEdit.text()) != "":
+            wlan0_config_file.write(u'psk="' + str(self.MainUIObj.wifiPasswordLineEdit.text()) + '"\n')
         # wlan0_config_file.write(u"key_mgmt=WPA-PSK\n")
         wlan0_config_file.write(u'}')
         wlan0_config_file.close()
-        self.obj.restartWifiThreadObject = ThreadRestartNetworking(ThreadRestartNetworking.WLAN)
-        self.obj.restartWifiThreadObject.signal.connect(self.wifiReconnectResult)
-        self.obj.restartWifiThreadObject.start()
-        self.obj.wifiMessageBox = dialog.dialog(self.obj,
+        self.MainUIObj.restartWifiThreadMainUIObject = ThreadRestartNetworking(ThreadRestartNetworking.WLAN)
+        self.MainUIObj.restartWifiThreadMainUIObject.signal.connect(self.wifiReconnectResult)
+        self.MainUIObj.restartWifiThreadMainUIObject.start()
+        self.MainUIObj.wifiMessageBox = dialog.dialog(self.MainUIObj,
                                                 "Restarting networking, please wait...",
                                                 icon="exclamation-mark.png",
                                                 buttons=QtWidgets.QMessageBox.Cancel) 
-        if self.obj.wifiMessageBox.exec_() in {QtWidgets.QMessageBox.Ok, QtWidgets.QMessageBox.Cancel}:
-            self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage)
+        if self.MainUIObj.wifiMessageBox.exec_() in {QtWidgets.QMessageBox.Ok, QtWidgets.QMessageBox.Cancel}:
+            self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.networkSettingsPage)
 
     def wifiReconnectResult(self, x):
-        self.obj.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        self.MainUIObj.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         if x is not None:
             print("Ouput from signal " + x)
-            self.obj.wifiMessageBox.setLocalIcon('success.png')
-            self.obj.wifiMessageBox.setText('Connected, IP: ' + x)
-            self.obj.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            self.obj.ipStatus.setText(x) #sets the IP addr. in the status bar
+            self.MainUIObj.wifiMessageBox.setLocalIcon('success.png')
+            self.MainUIObj.wifiMessageBox.setText('Connected, IP: ' + x)
+            self.MainUIObj.wifiMessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            self.MainUIObj.ipStatus.setText(x) #sets the IP addr. in the status bar
 
         else:
-            self.obj.wifiMessageBox.setText("Not able to connect to WiFi")
+            self.MainUIObj.wifiMessageBox.setText("Not able to connect to WiFi")
 
     def networkInfo(self):
         ipWifi = getIP(ThreadRestartNetworking.WLAN)
         ipEth = getIP(ThreadRestartNetworking.ETH)
 
-        self.obj.hostname.setText(getHostname())
-        self.obj.wifiAp.setText(getWifiAp())
-        self.obj.wifiIp.setText("Not connected" if not ipWifi else ipWifi)
-        self.obj.ipStatus.setText("Not connected" if not ipWifi else ipWifi)
-        self.obj.lanIp.setText("Not connected" if not ipEth else ipEth)
-        self.obj.wifiMac.setText(getMac(ThreadRestartNetworking.WLAN).decode('utf8'))
-        self.obj.lanMac.setText(getMac(ThreadRestartNetworking.ETH).decode('utf8'))
-        self.obj.stackedWidget.setCurrentWidget(self.obj.networkInfoPage)
+        self.MainUIObj.hostname.setText(getHostname())
+        self.MainUIObj.wifiAp.setText(getWifiAp())
+        self.MainUIObj.wifiIp.setText("Not connected" if not ipWifi else ipWifi)
+        self.MainUIObj.ipStatus.setText("Not connected" if not ipWifi else ipWifi)
+        self.MainUIObj.lanIp.setText("Not connected" if not ipEth else ipEth)
+        self.MainUIObj.wifiMac.setText(getMac(ThreadRestartNetworking.WLAN).decode('utf8'))
+        self.MainUIObj.lanMac.setText(getMac(ThreadRestartNetworking.ETH).decode('utf8'))
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.networkInfoPage)
 
     def wifiSettings(self):
-        self.obj.stackedWidget.setCurrentWidget(self.obj.wifiSettingsPage)
-        self.obj.wifiSettingsComboBox.clear()
-        self.obj.wifiSettingsComboBox.addItems(self.scan_wifi())
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.wifiSettingsPage)
+        self.MainUIObj.wifiSettingsComboBox.clear()
+        self.MainUIObj.wifiSettingsComboBox.addItems(self.scan_wifi())
 
     def scan_wifi(self):
         '''
@@ -100,12 +100,12 @@ class wifiSettingsPage:
         while(True):
             try:
                 if getIP("eth0"):
-                    self.obj.ipStatus.setText(getIP("eth0"))
+                    self.MainUIObj.ipStatus.setText(getIP("eth0"))
                 elif getIP("wlan0"):
-                    self.obj.ipStatus.setText(getIP("wlan0"))
+                    self.MainUIObj.ipStatus.setText(getIP("wlan0"))
                 else:
-                    self.obj.ipStatus.setText("Not connected")
+                    self.MainUIObj.ipStatus.setText("Not connected")
 
             except:
-                self.obj.ipStatus.setText("Not connected")
+                self.MainUIObj.ipStatus.setText("Not connected")
             time.sleep(60)

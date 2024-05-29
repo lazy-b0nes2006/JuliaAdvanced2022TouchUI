@@ -4,8 +4,8 @@ from threads import octopiclient
 from config import _fromUtf8
 
 class printerStatus:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     ''' +++++++++++++++++++++++++++++++++Printer Status+++++++++++++++++++++++++++++++++++ '''
     def updateTemperature(self, temperature):
@@ -22,45 +22,45 @@ class printerStatus:
             temperature['bedActual'] = 0
 
         if temperature['tool0Target'] == 0:
-            self.obj.tool0TempBar.setMaximum(300)
-            self.obj.tool0TempBar.setStyleSheet(styles.bar_heater_cold)
+            self.MainUIObj.tool0TempBar.setMaximum(300)
+            self.MainUIObj.tool0TempBar.setStyleSheet(styles.bar_heater_cold)
         elif temperature['tool0Actual'] <= temperature['tool0Target']:
-            self.obj.tool0TempBar.setMaximum(int(temperature['tool0Target']))
-            self.obj.tool0TempBar.setStyleSheet(styles.bar_heater_heating)
+            self.MainUIObj.tool0TempBar.setMaximum(int(temperature['tool0Target']))
+            self.MainUIObj.tool0TempBar.setStyleSheet(styles.bar_heater_heating)
         else:
-            self.obj.tool0TempBar.setMaximum(temperature['tool0Actual'])
-        self.obj.tool0TempBar.setValue(int(temperature['tool0Actual']))
-        self.obj.tool0ActualTemperature.setText(str(int(temperature['tool0Actual'])))
-        self.obj.tool0TargetTemperature.setText(str(int(temperature['tool0Target'])))
+            self.MainUIObj.tool0TempBar.setMaximum(temperature['tool0Actual'])
+        self.MainUIObj.tool0TempBar.setValue(int(temperature['tool0Actual']))
+        self.MainUIObj.tool0ActualTemperature.setText(str(int(temperature['tool0Actual'])))
+        self.MainUIObj.tool0TargetTemperature.setText(str(int(temperature['tool0Target'])))
 
         if temperature['bedTarget'] == 0:
-            self.obj.bedTempBar.setMaximum(150)
-            self.obj.bedTempBar.setStyleSheet(styles.bar_heater_cold)
+            self.MainUIObj.bedTempBar.setMaximum(150)
+            self.MainUIObj.bedTempBar.setStyleSheet(styles.bar_heater_cold)
         elif temperature['bedActual'] <= temperature['bedTarget']:
-            self.obj.bedTempBar.setMaximum(temperature['bedTarget'])
-            self.obj.bedTempBar.setStyleSheet(styles.bar_heater_heating)
+            self.MainUIObj.bedTempBar.setMaximum(temperature['bedTarget'])
+            self.MainUIObj.bedTempBar.setStyleSheet(styles.bar_heater_heating)
         else:
-            self.obj.bedTempBar.setMaximum(int(temperature['bedActual']))
-        self.obj.bedTempBar.setValue(int(temperature['bedActual']))
-        self.obj.bedActualTemperatute.setText(str(int(temperature['bedActual'])))
-        self.obj.bedTargetTemperature.setText(str(int(temperature['bedTarget'])))
+            self.MainUIObj.bedTempBar.setMaximum(int(temperature['bedActual']))
+        self.MainUIObj.bedTempBar.setValue(int(temperature['bedActual']))
+        self.MainUIObj.bedActualTemperatute.setText(str(int(temperature['bedActual'])))
+        self.MainUIObj.bedTargetTemperature.setText(str(int(temperature['bedTarget'])))
 
         # updates the progress bar on the change filament screen
-        if self.obj.changeFilamentHeatingFlag:
+        if self.MainUIObj.changeFilamentHeatingFlag:
             if temperature['tool0Target'] == 0:
-                self.obj.changeFilamentProgress.setMaximum(300)
+                self.MainUIObj.changeFilamentProgress.setMaximum(300)
             elif temperature['tool0Target'] - temperature['tool0Actual'] > 1:
-                self.obj.changeFilamentProgress.setMaximum(temperature['tool0Target'])
+                self.MainUIObj.changeFilamentProgress.setMaximum(temperature['tool0Target'])
             else:
-                self.obj.changeFilamentProgress.setMaximum(temperature['tool0Actual'])
-                self.obj.changeFilamentHeatingFlag = False
-                if self.obj.loadFlag:
-                    self.obj.stackedWidget.setCurrentWidget(self.obj.changeFilamentExtrudePage)
+                self.MainUIObj.changeFilamentProgress.setMaximum(temperature['tool0Actual'])
+                self.MainUIObj.changeFilamentHeatingFlag = False
+                if self.MainUIObj.loadFlag:
+                    self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.changeFilamentExtrudePage)
                 else:
-                    self.obj.stackedWidget.setCurrentWidget(self.obj.changeFilamentRetractPage)
+                    self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.changeFilamentRetractPage)
                     octopiclient.extrude(10)  # extrudes some amount of filament to prevent plugging
 
-            self.obj.changeFilamentProgress.setValue(temperature['tool0Actual'])
+            self.MainUIObj.changeFilamentProgress.setValue(temperature['tool0Actual'])
 
     def updatePrintStatus(self, file):
         '''
@@ -69,51 +69,51 @@ class printerStatus:
         :param file: dict of all the attributes of a particular file
         '''
         if file is None:
-            self.obj.currentFile = None
-            self.obj.currentImage = None
-            self.obj.timeLeft.setText("-")
-            self.obj.fileName.setText("-")
-            self.obj.printProgressBar.setValue(0)
-            self.obj.printTime.setText("-")
-            self.obj.playPauseButton.setDisabled(True)  # if file available, make play button visible
+            self.MainUIObj.currentFile = None
+            self.MainUIObj.currentImage = None
+            self.MainUIObj.timeLeft.setText("-")
+            self.MainUIObj.fileName.setText("-")
+            self.MainUIObj.printProgressBar.setValue(0)
+            self.MainUIObj.printTime.setText("-")
+            self.MainUIObj.playPauseButton.setDisabled(True)  # if file available, make play button visible
         else:
-            self.obj.playPauseButton.setDisabled(False)  # if file available, make play button visible
-            self.obj.fileName.setText(file['job']['file']['name'])
-            self.obj.currentFile = file['job']['file']['name']
+            self.MainUIObj.playPauseButton.setDisabled(False)  # if file available, make play button visible
+            self.MainUIObj.fileName.setText(file['job']['file']['name'])
+            self.MainUIObj.currentFile = file['job']['file']['name']
             if file['progress']['printTime'] is None:
-                self.obj.printTime.setText("-")
+                self.MainUIObj.printTime.setText("-")
             else:
                 m, s = divmod(file['progress']['printTime'], 60)
                 h, m = divmod(m, 60)
                 d, h = divmod(h, 24)
-                self.obj.printTime.setText("%d:%d:%02d:%02d" % (d, h, m, s))
+                self.MainUIObj.printTime.setText("%d:%d:%02d:%02d" % (d, h, m, s))
 
             if file['progress']['printTimeLeft'] is None:
-                self.obj.timeLeft.setText("-")
+                self.MainUIObj.timeLeft.setText("-")
             else:
                 m, s = divmod(file['progress']['printTimeLeft'], 60)
                 h, m = divmod(m, 60)
                 d, h = divmod(h, 24)
-                self.obj.timeLeft.setText("%d:%d:%02d:%02d" % (d, h, m, s))
+                self.MainUIObj.timeLeft.setText("%d:%d:%02d:%02d" % (d, h, m, s))
 
             if file['progress']['completion'] is None:
-                self.obj.printProgressBar.setValue(0)
+                self.MainUIObj.printProgressBar.setValue(0)
             else:
-                self.obj.printProgressBar.setValue(file['progress']['completion'])
+                self.MainUIObj.printProgressBar.setValue(file['progress']['completion'])
 
             '''
             If image is available from server, set it, otherwise display default image.
             If the image was already loaded, don't load it again.
             '''
-            if self.obj.currentImage != self.obj.currentFile:
-                self.obj.currentImage = self.obj.currentFile
+            if self.MainUIObj.currentImage != self.MainUIObj.currentFile:
+                self.MainUIObj.currentImage = self.MainUIObj.currentFile
                 img = octopiclient.getImage(file['job']['file']['name'].replace(".gcode", ".png"))
                 if img:
                     pixmap = QtGui.QPixmap()
                     pixmap.loadFromData(img)
-                    self.obj.printPreviewMain.setPixmap(pixmap)
+                    self.MainUIObj.printPreviewMain.setPixmap(pixmap)
                 else:
-                    self.obj.printPreviewMain.setPixmap(QtGui.QPixmap(_fromUtf8("templates/img/thumbnail.png")))
+                    self.MainUIObj.printPreviewMain.setPixmap(QtGui.QPixmap(_fromUtf8("templates/img/thumbnail.png")))
 
     def updateStatus(self, status):
         '''
@@ -121,43 +121,43 @@ class printerStatus:
         this function updates the status bar, as well as enables/disables relevant buttons
         :param status: String of the status text
         '''
-        self.obj.printerStatusText = status
-        self.obj.printerStatus.setText(status)
+        self.MainUIObj.printerStatusText = status
+        self.MainUIObj.printerStatus.setText(status)
 
         if status == "Printing":  # Green
-            self.obj.printerStatusColour.setStyleSheet(styles.printer_status_green)
+            self.MainUIObj.printerStatusColour.setStyleSheet(styles.printer_status_green)
         elif status == "Offline":  # Red
-            self.obj.printerStatusColour.setStyleSheet(styles.printer_status_red)
+            self.MainUIObj.printerStatusColour.setStyleSheet(styles.printer_status_red)
         elif status == "Paused":  # Amber
-            self.obj.printerStatusColour.setStyleSheet(styles.printer_status_amber)
+            self.MainUIObj.printerStatusColour.setStyleSheet(styles.printer_status_amber)
         elif status == "Operational":  # Amber
-            self.obj.printerStatusColour.setStyleSheet(styles.printer_status_blue)
+            self.MainUIObj.printerStatusColour.setStyleSheet(styles.printer_status_blue)
 
         '''
         Depending on Status, enable and Disable Buttons
         '''
         if status == "Printing":
-            self.obj.playPauseButton.setChecked(True)
-            self.obj.stopButton.setDisabled(False)
-            self.obj.motionTab.setDisabled(True)
-            self.obj.changeFilamentButton.setDisabled(True)
-            self.obj.menuCalibrateButton.setDisabled(True)
-            self.obj.menuPrintButton.setDisabled(True)
+            self.MainUIObj.playPauseButton.setChecked(True)
+            self.MainUIObj.stopButton.setDisabled(False)
+            self.MainUIObj.motionTab.setDisabled(True)
+            self.MainUIObj.changeFilamentButton.setDisabled(True)
+            self.MainUIObj.menuCalibrateButton.setDisabled(True)
+            self.MainUIObj.menuPrintButton.setDisabled(True)
             # if not Development:
             #     if not self.__timelapse_enabled:
             #         octopiclient.cancelPrint()
             #         self.coolDownAction()
         elif status == "Paused":
-            self.obj.playPauseButton.setChecked(False)
-            self.obj.stopButton.setDisabled(False)
-            self.obj.motionTab.setDisabled(False)
-            self.obj.changeFilamentButton.setDisabled(False)
-            self.obj.menuCalibrateButton.setDisabled(True)
-            self.obj.menuPrintButton.setDisabled(True)
+            self.MainUIObj.playPauseButton.setChecked(False)
+            self.MainUIObj.stopButton.setDisabled(False)
+            self.MainUIObj.motionTab.setDisabled(False)
+            self.MainUIObj.changeFilamentButton.setDisabled(False)
+            self.MainUIObj.menuCalibrateButton.setDisabled(True)
+            self.MainUIObj.menuPrintButton.setDisabled(True)
         else:
-            self.obj.stopButton.setDisabled(True)
-            self.obj.playPauseButton.setChecked(False)
-            self.obj.motionTab.setDisabled(False)
-            self.obj.changeFilamentButton.setDisabled(False)
-            self.obj.menuCalibrateButton.setDisabled(False)
-            self.obj.menuPrintButton.setDisabled(False)
+            self.MainUIObj.stopButton.setDisabled(True)
+            self.MainUIObj.playPauseButton.setChecked(False)
+            self.MainUIObj.motionTab.setDisabled(False)
+            self.MainUIObj.changeFilamentButton.setDisabled(False)
+            self.MainUIObj.menuCalibrateButton.setDisabled(False)
+            self.MainUIObj.menuPrintButton.setDisabled(False)

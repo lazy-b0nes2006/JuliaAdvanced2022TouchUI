@@ -1,9 +1,9 @@
 class networkSettingsPage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.networkInfoButton.pressed.connect(self.obj.wifiSettingsPageInstance.networkInfo)
-        self.obj.configureWifiButton.pressed.connect(self.obj.wifiSettingsPageInstance.wifiSettings)
-        self.obj.configureEthButton.pressed.connect(self.obj.ethernetSettingsPageInstance.ethSettings)
-        self.obj.networkSettingsBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage))
+        self.MainUIObj.networkInfoButton.pressed.connect(self.MainUIObj.wifiSettingsPageInstance.networkInfo)
+        self.MainUIObj.configureWifiButton.pressed.connect(self.MainUIObj.wifiSettingsPageInstance.wifiSettings)
+        self.MainUIObj.configureEthButton.pressed.connect(self.MainUIObj.ethernetSettingsPageInstance.ethSettings)
+        self.MainUIObj.networkSettingsBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.settingsPage))

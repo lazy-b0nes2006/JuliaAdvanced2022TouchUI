@@ -3,46 +3,46 @@ from PyQt5 import QtGui
 from threads import octopiclient
 
 class calibrationPage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
+        self.MainUIObj.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
 
-        self.obj.calibrateBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.MenuPage))
-        self.obj.nozzleOffsetButton.pressed.connect(self.nozzleOffset)
+        self.MainUIObj.calibrateBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.MenuPage))
+        self.MainUIObj.nozzleOffsetButton.pressed.connect(self.nozzleOffset)
         # the -ve sign is such that its converted to home offset and not just distance between nozzle and bed
-        self.obj.nozzleOffsetSetButton.pressed.connect(
-            lambda: self.setZHomeOffset(self.obj.nozzleOffsetDoubleSpinBox.value(), True))
-        self.obj.nozzleOffsetBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage))
+        self.MainUIObj.nozzleOffsetSetButton.pressed.connect(
+            lambda: self.setZHomeOffset(self.MainUIObj.nozzleOffsetDoubleSpinBox.value(), True))
+        self.MainUIObj.nozzleOffsetBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.calibratePage))
         # Bypass calibration wizzard page for not using Klipper
-        # self.obj.calibrationWizardButton.clicked.connect(
-        #     lambda: self.stackedWidget.setCurrentWidget(self.obj.calibrationWizardPage))
-        self.obj.calibrationWizardButton.clicked.connect(self.quickStep1)
+        # self.MainUIObj.calibrationWizardButton.clicked.connect(
+        #     lambda: self.stackedWidget.setCurrentWidget(self.MainUIObj.calibrationWizardPage))
+        self.MainUIObj.calibrationWizardButton.clicked.connect(self.quickStep1)
 
-        self.obj.calibrationWizardBackButton.clicked.connect(
-            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage))
+        self.MainUIObj.calibrationWizardBackButton.clicked.connect(
+            lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.calibratePage))
         # required for Klipper
-        # self.obj.quickCalibrationButton.clicked.connect(self.obj.quickStep6)
-        # self.obj.fullCalibrationButton.clicked.connect(self.quickStep1)
+        # self.MainUIObj.quickCalibrationButton.clicked.connect(self.MainUIObj.quickStep6)
+        # self.MainUIObj.fullCalibrationButton.clicked.connect(self.quickStep1)
 
-        self.obj.quickStep1NextButton.clicked.connect(self.quickStep2)
-        self.obj.quickStep2NextButton.clicked.connect(self.quickStep3)
-        self.obj.quickStep3NextButton.clicked.connect(self.quickStep4)
-        self.obj.quickStep4NextButton.clicked.connect(self.quickStep5)
-        self.obj.quickStep5NextButton.clicked.connect(self.doneStep)
+        self.MainUIObj.quickStep1NextButton.clicked.connect(self.quickStep2)
+        self.MainUIObj.quickStep2NextButton.clicked.connect(self.quickStep3)
+        self.MainUIObj.quickStep3NextButton.clicked.connect(self.quickStep4)
+        self.MainUIObj.quickStep4NextButton.clicked.connect(self.quickStep5)
+        self.MainUIObj.quickStep5NextButton.clicked.connect(self.doneStep)
         # Required for Klipper
-        # self.obj.quickStep5NextButton.clicked.connect(self.quickStep6)
-        # self.obj.quickStep6NextButton.clicked.connect(self.doneStep)
+        # self.MainUIObj.quickStep5NextButton.clicked.connect(self.quickStep6)
+        # self.MainUIObj.quickStep6NextButton.clicked.connect(self.doneStep)
 
-        # self.obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
-        # self.obj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
-        self.obj.quickStep1CancelButton.pressed.connect(self.cancelStep)
-        self.obj.quickStep2CancelButton.pressed.connect(self.cancelStep)
-        self.obj.quickStep3CancelButton.pressed.connect(self.cancelStep)
-        self.obj.quickStep4CancelButton.pressed.connect(self.cancelStep)
-        self.obj.quickStep5CancelButton.pressed.connect(self.cancelStep)
-        # self.obj.quickStep6CancelButton.pressed.connect(self.cancelStep)
+        # self.MainUIObj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=-0.05))
+        # self.MainUIObj.moveZPCalibrateButton.pressed.connect(lambda: octopiclient.jog(z=0.05))
+        self.MainUIObj.quickStep1CancelButton.pressed.connect(self.cancelStep)
+        self.MainUIObj.quickStep2CancelButton.pressed.connect(self.cancelStep)
+        self.MainUIObj.quickStep3CancelButton.pressed.connect(self.cancelStep)
+        self.MainUIObj.quickStep4CancelButton.pressed.connect(self.cancelStep)
+        self.MainUIObj.quickStep5CancelButton.pressed.connect(self.cancelStep)
+        # self.MainUIObj.quickStep6CancelButton.pressed.connect(self.cancelStep)
 
 
     def getZHomeOffset(self, offset):
@@ -52,8 +52,8 @@ class calibrationPage:
         :param offset:
         :return:
         '''
-        self.obj.nozzleOffsetDoubleSpinBox.setValue(-float(offset))
-        self.obj.nozzleHomeOffset = offset
+        self.MainUIObj.nozzleOffsetDoubleSpinBox.setValue(-float(offset))
+        self.MainUIObj.nozzleHomeOffset = offset
 
     def setZHomeOffset(self, offset, setOffset=False):
         '''
@@ -66,9 +66,9 @@ class calibrationPage:
         #TODO can make this simpler, asset the offset value to string float to begin with instead of doing confitionals
         '''
 
-        if self.obj.setHomeOffsetBool:
+        if self.MainUIObj.setHomeOffsetBool:
             octopiclient.gcode(command='M206 Z{}'.format(-float(offset)))
-            self.obj.setHomeOffsetBool = False
+            self.MainUIObj.setHomeOffsetBool = False
             octopiclient.gcode(command='M500')
             # save in EEPROM
         if setOffset:    # When the offset needs to be set from spinbox value
@@ -81,7 +81,7 @@ class calibrationPage:
         :return:
         '''
         octopiclient.gcode(command='M503')
-        self.obj.stackedWidget.setCurrentWidget(self.obj.nozzleOffsetPage)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.nozzleOffsetPage)
 
     def quickStep1(self):
         '''
@@ -97,63 +97,63 @@ class calibrationPage:
         octopiclient.gcode(command='M206 Z0')
         octopiclient.home(['x', 'y', 'z'])
         octopiclient.jog(x=100, y=100, z=15, absolute=True, speed=1500)
-        self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep1Page)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep1Page)
 
     def quickStep2(self):
         '''
         Askes user to release all Leveling Screws
         :return:
         '''
-        self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep2Page)
-        self.obj.movie1 = QtGui.QMovie("templates/img/calibration/calib1.gif")
-        self.obj.calib1.setMovie(self.obj.movie1)
-        self.obj.movie1.start()
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep2Page)
+        self.MainUIObj.movie1 = QtGui.QMovie("templates/img/calibration/calib1.gif")
+        self.MainUIObj.calib1.setMovie(self.MainUIObj.movie1)
+        self.MainUIObj.movie1.start()
 
     def quickStep3(self):
         '''
         leveks first position
         :return:
         '''
-        self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep3Page)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep3Page)
         octopiclient.jog(x=calibrationPosition['X1'], y=calibrationPosition['Y1'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.obj.movie1.stop()
-        self.obj.movie2 = QtGui.QMovie("templates/img/calibration/calib2.gif")
-        self.obj.calib2.setMovie(self.obj.movie2)
-        self.obj.movie2.start()
+        self.MainUIObj.movie1.stop()
+        self.MainUIObj.movie2 = QtGui.QMovie("templates/img/calibration/calib2.gif")
+        self.MainUIObj.calib2.setMovie(self.MainUIObj.movie2)
+        self.MainUIObj.movie2.start()
 
     def quickStep4(self):
         '''
         levels second leveling position
         '''
-        self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep4Page)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep4Page)
         octopiclient.jog(z=10, absolute=True, speed=1500)
         octopiclient.jog(x=calibrationPosition['X2'], y=calibrationPosition['Y2'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.obj.movie2.stop()
-        self.obj.movie3 = QtGui.QMovie("templates/img/calibration/calib3.gif")
-        self.obj.calib3.setMovie(self.obj.movie3)
-        self.obj.movie3.start()
+        self.MainUIObj.movie2.stop()
+        self.MainUIObj.movie3 = QtGui.QMovie("templates/img/calibration/calib3.gif")
+        self.MainUIObj.calib3.setMovie(self.MainUIObj.movie3)
+        self.MainUIObj.movie3.start()
 
     def quickStep5(self):
         '''
         levels third leveling position
         :return:
         '''
-        self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep5Page)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep5Page)
         octopiclient.jog(z=10, absolute=True, speed=1500)
         octopiclient.jog(x=calibrationPosition['X3'], y=calibrationPosition['Y3'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.obj.movie3.stop()
-        self.obj.movie4 = QtGui.QMovie("templates/img/calibration/calib4.gif")
-        self.obj.calib4.setMovie(self.obj.movie4)
-        self.obj.movie4.start()
+        self.MainUIObj.movie3.stop()
+        self.MainUIObj.movie4 = QtGui.QMovie("templates/img/calibration/calib4.gif")
+        self.MainUIObj.calib4.setMovie(self.MainUIObj.movie4)
+        self.MainUIObj.movie4.start()
 
     # def quickStep6(self):
     #     '''
     #     Performs Auto bed Leveiling, required for Klipper
     #     '''
-    #     self.obj.stackedWidget.setCurrentWidget(self.obj.quickStep6Page)
+    #     self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep6Page)
     #     octopiclient.gcode(command='M190 S70')
     #     octopiclient.gcode(command='G29')
 
@@ -163,18 +163,18 @@ class calibrationPage:
         :return:
         '''
 
-        self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage)
-        self.obj.movie4.stop()
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.calibratePage)
+        self.MainUIObj.movie4.stop()
         octopiclient.gcode(command='M501')
         octopiclient.home(['x', 'y', 'z'])
 
     def cancelStep(self):
         octopiclient.gcode(command='M501')
-        self.obj.stackedWidget.setCurrentWidget(self.obj.calibratePage)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.calibratePage)
         try:
-            self.obj.movie1.stop()
-            self.obj.movie2.stop()
-            self.obj.movie3.stop()
-            self.obj.movie4.stop()
+            self.MainUIObj.movie1.stop()
+            self.MainUIObj.movie2.stop()
+            self.MainUIObj.movie3.stop()
+            self.MainUIObj.movie4.stop()
         except:
             pass

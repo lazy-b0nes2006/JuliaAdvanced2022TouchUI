@@ -5,12 +5,12 @@ from PyQt5 import QtCore
 from threads import octopiclient
 
 class softwareUpdatePage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.softwareUpdateBackButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage))
-        self.obj.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
+        self.MainUIObj.softwareUpdateBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.settingsPage))
+        self.MainUIObj.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
 
     ''' +++++++++++++++++++++++++++++++++OTA Update+++++++++++++++++++++++++++++++++++ '''
 
@@ -36,12 +36,12 @@ class softwareUpdatePage:
         return u'\u2713' + "Firmware: Unknown\n"
 
     def displayVersionInfo(self):
-        self.obj.updateListWidget.clear()
+        self.MainUIObj.updateListWidget.clear()
         updateAvailable = False
-        self.obj.performUpdateButton.setDisabled(True)
+        self.MainUIObj.performUpdateButton.setDisabled(True)
 
         # Firmware version on the MKS https://github.com/FracktalWorks/OctoPrint-JuliaFirmwareUpdater
-        self.obj.updateListWidget.addItem(self.getFirmwareVersion())
+        self.MainUIObj.updateListWidget.addItem(self.getFirmwareVersion())
 
         data = octopiclient.getSoftwareUpdateInfo()
         if data:
@@ -54,50 +54,50 @@ class softwareUpdatePage:
                     info += plugin["information"]["remote"]["value"]
                 else:
                     info += "Unknown"
-                self.obj.updateListWidget.addItem(info)
+                self.MainUIObj.updateListWidget.addItem(info)
 
                 if plugin["updateAvailable"]:
                     updateAvailable = True
 
                 # if not updatable:
-                #     self.obj.updateListWidget.addItem(u'\u2713' + data["information"][item]["displayName"] +
+                #     self.MainUIObj.updateListWidget.addItem(u'\u2713' + data["information"][item]["displayName"] +
                 #                                   "  " + data["information"][item]["displayVersion"] + "\n"
                 #                                   + "   Available: " +
                 #                                   )
                 # else:
                 #     updateAvailable = True
-                #     self.obj.updateListWidget.addItem(u"\u2717" + data["information"][item]["displayName"] +
+                #     self.MainUIObj.updateListWidget.addItem(u"\u2717" + data["information"][item]["displayName"] +
                 #                                   "  " + data["information"][item]["displayVersion"] + "\n"
                 #                                   + "   Available: " +
                 #                                   data["information"][item]["information"]["remote"]["value"])
 
         if updateAvailable:
-            self.obj.performUpdateButton.setDisabled(False)
-        self.obj.stackedWidget.setCurrentWidget(self.obj.OTAUpdatePage)
+            self.MainUIObj.performUpdateButton.setDisabled(False)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.OTAUpdatePage)
 
     def softwareUpdateResult(self, data):
         messageText = ""
         for item in data:
             messageText += item + ": " + data[item][0] + ".\n"
         messageText += "Restart required"
-        self.obj.homePageInstance.askAndReboot(messageText)
+        self.MainUIObj.homePageInstance.askAndReboot(messageText)
 
     def softwareUpdateProgress(self, data):
-        self.obj.stackedWidget.setCurrentWidget(self.obj.softwareUpdateProgressPage)
-        self.obj.logTextEdit.setTextColor(QtCore.Qt.red)
-        self.obj.logTextEdit.append("---------------------------------------------------------------\n"
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.softwareUpdateProgressPage)
+        self.MainUIObj.logTextEdit.setTextColor(QtCore.Qt.red)
+        self.MainUIObj.logTextEdit.append("---------------------------------------------------------------\n"
                                      "Updating " + data["name"] + " to " + data["version"] + "\n"
                                      "---------------------------------------------------------------")
 
     def softwareUpdateProgressLog(self, data):
-        self.obj.logTextEdit.setTextColor(QtCore.Qt.white)
+        self.MainUIObj.logTextEdit.setTextColor(QtCore.Qt.white)
         for line in data:
-            self.obj.logTextEdit.append(line["line"])
+            self.MainUIObj.logTextEdit.append(line["line"])
 
     def updateFailed(self, data):
-        self.obj.stackedWidget.setCurrentWidget(self.obj.settingsPage)
+        self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.settingsPage)
         messageText = (data["name"] + " failed to update\n")
-        if dialog.WarningOkCancel(self.obj, messageText, overlay=True):
+        if dialog.WarningOkCancel(self.MainUIObj, messageText, overlay=True):
             pass
 
     def softwareUpdate(self):
@@ -109,8 +109,8 @@ class softwareUpdatePage:
                     updateAvailable = True
         if updateAvailable:
             print('Update Available')
-            if dialog.SuccessYesNo(self.obj, "Update Available! Update Now?", overlay=True):
+            if dialog.SuccessYesNo(self.MainUIObj, "Update Available! Update Now?", overlay=True):
                 octopiclient.performSoftwareUpdate()
         else:
-            if dialog.SuccessOk(self.obj, "System is Up To Date!", overlay=True):
+            if dialog.SuccessOk(self.MainUIObj, "System is Up To Date!", overlay=True):
                 print('Update Unavailable')

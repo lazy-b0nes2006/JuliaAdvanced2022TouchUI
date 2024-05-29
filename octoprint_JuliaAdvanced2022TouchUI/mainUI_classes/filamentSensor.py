@@ -5,26 +5,26 @@ from PyQt5 import QtGui
 from threads import octopiclient
 
 class filamentSensor:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
+        self.MainUIObj.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
 
     def isFilamentSensorInstalled(self):
         success = False
         try:
             headers = {'X-Api-Key': apiKey}
-            req = requests.get('http://{}/plugin/Julia2018FilamentSensor/status'.format(ip), headers=headers)
+            req = requests.get(f'http://{ip}/plugin/Julia2018FilamentSensor/status', headers=headers)
             success = req.status_code == requests.codes.ok
         except:
             pass
-        self.obj.toggleFilamentSensorButton.setEnabled(success)
+        self.MainUIObj.toggleFilamentSensorButton.setEnabled(success)
         return success
 
     def toggleFilamentSensor(self):
         headers = {'X-Api-Key': apiKey}
-        requests.get('http://{}/plugin/Julia2018FilamentSensor/toggle'.format(ip), headers=headers)
+        requests.get(f'http://{ip}/plugin/Julia2018FilamentSensor/toggle', headers=headers)
 
     def filamentSensorHandler(self, data):
         sensor_enabled = False
@@ -33,7 +33,7 @@ class filamentSensor:
             sensor_enabled = data["sensor_enabled"] == 1
 
         icon = 'filamentSensorOn' if sensor_enabled else 'filamentSensorOff'
-        self.obj.toggleFilamentSensorButton.setIcon(QtGui.QIcon(_fromUtf8("templates/img/" + icon)))
+        self.MainUIObj.toggleFilamentSensorButton.setIcon(QtGui.QIcon(_fromUtf8("templates/img/" + icon)))
 
         if not sensor_enabled:
             return
@@ -52,21 +52,23 @@ class filamentSensor:
         if 'pause_print' in data:
             pause_print = data["pause_print"]
 
-        if triggered_extruder0 and self.obj.stackedWidget.currentWidget() not in [self.obj.changeFilamentPage, self.obj.changeFilamentProgressPage,
-                                  self.obj.changeFilamentExtrudePage, self.obj.changeFilamentRetractPage]:
-            if dialog.WarningOk(self.obj, "Filament outage in Extruder 0"):
+        if triggered_extruder0 and self.MainUIObj.stackedWidget.currentWidget() not in [
+            self.MainUIObj.changeFilamentPage, self.MainUIObj.changeFilamentProgressPage,
+            self.MainUIObj.changeFilamentExtrudePage, self.MainUIObj.changeFilamentRetractPage]:
+            if dialog.WarningOk(self.MainUIObj, "Filament outage in Extruder 0"):
                 pass
 
         if triggered_door:
-            if self.obj.printerStatusText == "Printing":
-                no_pause_pages = [self.obj.controlPage, self.obj.changeFilamentPage, self.obj.changeFilamentProgressPage,
-                                  self.obj.changeFilamentExtrudePage, self.obj.changeFilamentRetractPage]
-                if not pause_print or self.obj.stackedWidget.currentWidget() in no_pause_pages:
-                    if dialog.WarningOk(self.obj, "Door opened"):
+            if self.MainUIObj.printerStatusText == "Printing":
+                no_pause_pages = [self.MainUIObj.controlPage, self.MainUIObj.changeFilamentPage, 
+                                  self.MainUIObj.changeFilamentProgressPage, self.MainUIObj.changeFilamentExtrudePage, 
+                                  self.MainUIObj.changeFilamentRetractPage]
+                if not pause_print or self.MainUIObj.stackedWidget.currentWidget() in no_pause_pages:
+                    if dialog.WarningOk(self.MainUIObj, "Door opened"):
                         return
                 octopiclient.pausePrint()
-                if dialog.WarningOk(self.obj, "Door opened. Print paused.", overlay=True):
+                if dialog.WarningOk(self.MainUIObj, "Door opened. Print paused.", overlay=True):
                     return
             else:
-                if dialog.WarningOk(self.obj, "Door opened"):
+                if dialog.WarningOk(self.MainUIObj, "Door opened"):
                     return

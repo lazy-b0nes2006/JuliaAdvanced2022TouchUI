@@ -4,23 +4,23 @@ from threads import octopiclient
 
 
 class homePage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.stopButton.pressed.connect(self.stopActionMessageBox)
-        self.obj.menuButton.pressed.connect(lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.MenuPage))
-        self.obj.controlButton.pressed.connect(self.obj.controlScreenInstance.control)
-        self.obj.playPauseButton.clicked.connect(self.playPauseAction)
+        self.MainUIObj.stopButton.pressed.connect(self.stopActionMessageBox)
+        self.MainUIObj.menuButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.MenuPage))
+        self.MainUIObj.controlButton.pressed.connect(self.MainUIObj.controlScreenInstance.control)
+        self.MainUIObj.playPauseButton.clicked.connect(self.playPauseAction)
 
     def tellAndReboot(self, msg="Rebooting...", overlay=True):
-        if dialog.WarningOk(self.obj, msg, overlay=overlay):
+        if dialog.WarningOk(self.MainUIObj, msg, overlay=overlay):
             os.system('sudo reboot now')
             return True
         return False
 
     def askAndReboot(self, msg="Are you sure you want to reboot?", overlay=True):
-        if dialog.WarningYesNo(self.obj, msg, overlay=overlay):
+        if dialog.WarningYesNo(self.MainUIObj, msg, overlay=overlay):
             os.system('sudo reboot now')
             return True
         return False
@@ -29,17 +29,17 @@ class homePage:
         '''
         Displays a message box asking if the user is sure if he wants to turn off the print
         '''
-        if dialog.WarningYesNo(self.obj, "Are you sure you want to stop the print?"):
+        if dialog.WarningYesNo(self.MainUIObj, "Are you sure you want to stop the print?"):
             octopiclient.cancelPrint()
 
     def playPauseAction(self):
         '''
         Toggles Play/Pause of a print depending on the status of the print
         '''
-        if self.obj.printerStatusText == "Operational":
-            if self.obj.playPauseButton.isChecked:
+        if self.MainUIObj.printerStatusText == "Operational":
+            if self.MainUIObj.playPauseButton.isChecked:
                 octopiclient.startPrint()
-        elif self.obj.printerStatusText == "Printing":
+        elif self.MainUIObj.printerStatusText == "Printing":
             octopiclient.pausePrint()
-        elif self.obj.printerStatusText == "Paused":
+        elif self.MainUIObj.printerStatusText == "Paused":
             octopiclient.resumePrint()

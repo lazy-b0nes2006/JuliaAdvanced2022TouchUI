@@ -1,7 +1,7 @@
 class networkInfoPage:
-    def __init__(self, obj):
-        self.obj = obj
+    def __init__(self, MainUIObj):
+        self.MainUIObj = MainUIObj
 
     def connect(self):
-        self.obj.networkInfoBackButton.pressed.connect(
-            lambda: self.obj.stackedWidget.setCurrentWidget(self.obj.networkSettingsPage))
+        self.MainUIObj.networkInfoBackButton.pressed.connect(
+            lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.networkSettingsPage))
