@@ -13,11 +13,17 @@ from MainUIClass.import_helper import load_classes      #used to import all clas
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
-    def __init__(self):
+    def __init__(self, idex):
         '''
         This method gets called when an object of type MainUIClass is defined
         '''
         super(MainUIClass, self).__init__()
+
+        self.idex = idex
+
+        if self.idex:
+            from idexConfig import idexConfig
+            self.idexConfigInstance = idexConfig(self)
 
         # classes = load_classes('mainUI_classes')
         # globals().update(classes)
@@ -170,6 +176,9 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.filamentSensorInstance.connect()
         self.settingsPageInstance.connect()
         self.networkSettingsPageInstance.connect()
+
+        if self.idex:
+            self.idexConfigInstance.connect()
  
         #  # Lock settings
         #     if not Development:
