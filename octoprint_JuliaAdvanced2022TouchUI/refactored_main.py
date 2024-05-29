@@ -1,5 +1,5 @@
 import sys
-from MainUIClass_def import MainUIClass
+from UIClass import UIClass
 from PyQt5 import QtWidgets
 
 #if not Development:
@@ -11,7 +11,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # Intialize the library (must be called once before other functions).
     # Creates an object of type MainUiClass
-    MainWindow = MainUIClass()
+    MainWindow = UIClass()
     MainWindow.show()
     # MainWindow.showFullScreen()
     # MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)

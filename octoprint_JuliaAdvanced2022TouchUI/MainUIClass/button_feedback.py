@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtGui
-from buzzer_feedback import buzzer
+from MainUIClass.buzzer_feedback import buzzer
 
 OriginalPushButton = QtGui.QPushButton
 OriginalToolButton = QtGui.QToolButton

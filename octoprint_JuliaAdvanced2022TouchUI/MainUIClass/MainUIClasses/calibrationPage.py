@@ -1,6 +1,6 @@
-from config import calibrationPosition
+from MainUIClass.config import calibrationPosition
 from PyQt5 import QtGui
-from threads import octopiclient
+from MainUIClass.threads import octopiclient
 
 class calibrationPage:
     def __init__(self, MainUIObj):

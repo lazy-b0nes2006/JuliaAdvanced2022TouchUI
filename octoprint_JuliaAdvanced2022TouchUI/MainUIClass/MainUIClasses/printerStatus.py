@@ -1,7 +1,7 @@
 import styles
 from PyQt5 import QtGui
-from threads import octopiclient
-from config import _fromUtf8
+from MainUIClass.threads import octopiclient
+from MainUIClass.config import _fromUtf8
 
 class printerStatus:
     def __init__(self, MainUIObj):

@@ -1,4 +1,4 @@
-from threads import octopiclient
+from MainUIClass.threads import octopiclient
 import dialog
 import os
 

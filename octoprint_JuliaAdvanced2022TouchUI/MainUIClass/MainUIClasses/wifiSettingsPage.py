@@ -2,10 +2,10 @@ import io
 import subprocess
 from PyQt5 import QtWidgets
 import dialog
-from threads import ThreadRestartNetworking
-from network_utils import *
+from MainUIClass.threads import ThreadRestartNetworking
+from MainUIClass.network_utils import *
 import time
-from decorators import run_async
+from MainUIClass.decorators import run_async
 
 class wifiSettingsPage:
     def __init__(self, MainUIObj):

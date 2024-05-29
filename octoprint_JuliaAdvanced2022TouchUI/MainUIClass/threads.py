@@ -1,10 +1,10 @@
 from PyQt5 import QtCore
 from octoprintAPI import octoprintAPI
 import subprocess
-from config import ip, apiKey, Development
+from MainUIClass.config import ip, apiKey, Development
 import time
 import os
-from network_utils import getIP
+from MainUIClass.network_utils import getIP
 
 octopiclient = octoprintAPI(ip, apiKey)
 

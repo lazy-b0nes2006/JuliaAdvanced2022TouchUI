@@ -1,6 +1,6 @@
-from decorators import run_async
+from MainUIClass.decorators import run_async
 import time
-from config import Development
+from MainUIClass.config import Development
 
 if not Development:
     import RPi.GPIO as GPIO

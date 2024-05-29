@@ -1,5 +1,5 @@
 import dialog
-from config import ip, apiKey
+from MainUIClass.config import ip, apiKey
 import requests
 
 

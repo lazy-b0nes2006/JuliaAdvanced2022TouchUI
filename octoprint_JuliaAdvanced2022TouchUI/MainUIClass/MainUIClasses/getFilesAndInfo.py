@@ -1,9 +1,9 @@
-from threads import octopiclient, ThreadFileUpload
+from MainUIClass.threads import octopiclient, ThreadFileUpload
 import os
 import subprocess
 from datetime import datetime
 from PyQt5 import QtGui
-from config import _fromUtf8
+from MainUIClass.config import _fromUtf8
 from hurry.filesize import size
 
 class getFilesAndInfo:

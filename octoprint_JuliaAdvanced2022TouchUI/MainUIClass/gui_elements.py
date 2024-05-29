@@ -1,12 +1,12 @@
-from config import *
-from threads import *
-from socket_qt import *
-from network_utils import *
+from MainUIClass.config import *
+from MainUIClass.threads import *
+from MainUIClass.socket_qt import *
+from MainUIClass.network_utils import *
 
 import qrcode
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-from buzzer_feedback import buzzer
+from MainUIClass.buzzer_feedback import buzzer
 
 
 class Image(qrcode.image.base.BaseImage):

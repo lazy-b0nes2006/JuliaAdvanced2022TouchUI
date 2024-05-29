@@ -1,16 +1,15 @@
 from PyQt5 import QtWidgets, QtGui
+from MainUIClass.MainUIClasses import changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
 import mainGUI
-from config import Development, _fromUtf8
+from MainUIClass.config import Development, _fromUtf8
 import logging
-from threads import *
+from MainUIClass.threads import *
 import styles
-from socket_qt import QtWebsocket
+from MainUIClass.socket_qt import QtWebsocket
 
-from gui_elements import ClickableLineEdit
+from MainUIClass.gui_elements import ClickableLineEdit
 
-from import_helper import load_classes      #used to import all classes at runtime
-
-from mainUI_classes import start_keyboard, printRestore, controlScreen, filamentSensor, printerStatus, homePage, menuPage, calibrationPage, socketConnections, getFilesAndInfo, printLocationScreen, changeFilamentRoutine, networkInfoPage, wifiSettingsPage, ethernetSettingsPage, networkSettingsPage, displaySettings, softwareUpdatePage, firmwareUpdatePage, settingsPage
+from MainUIClass.import_helper import load_classes      #used to import all classes at runtime
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     

@@ -1,8 +1,8 @@
 import dialog
 import requests
-from config import apiKey, ip
+from MainUIClass.config import apiKey, ip
 from PyQt5 import QtCore
-from threads import octopiclient
+from MainUIClass.threads import octopiclient
 
 class softwareUpdatePage:
     def __init__(self, MainUIObj):

@@ -1,7 +1,7 @@
-from network_utils import getIP
+from MainUIClass.network_utils import getIP
 import qrcode
-from threads import ThreadRestartNetworking, octopiclient
-from gui_elements import Image
+from MainUIClass.threads import ThreadRestartNetworking, octopiclient
+from MainUIClass.gui_elements import Image
 import dialog
 import os
 

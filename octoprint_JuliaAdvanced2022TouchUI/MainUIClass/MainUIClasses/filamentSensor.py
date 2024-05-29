@@ -1,8 +1,8 @@
 import dialog
 import requests
-from config import apiKey, _fromUtf8, ip
+from MainUIClass.config import apiKey, _fromUtf8, ip
 from PyQt5 import QtGui
-from threads import octopiclient
+from MainUIClass.threads import octopiclient
 
 class filamentSensor:
     def __init__(self, MainUIObj):

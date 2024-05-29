@@ -1,8 +1,8 @@
 import subprocess
 from PyQt5 import QtWidgets
 import dialog
-from threads import ThreadRestartNetworking
-from network_utils import *
+from MainUIClass.threads import ThreadRestartNetworking
+from MainUIClass.network_utils import *
 import re
 
 class ethernetSettingsPage:

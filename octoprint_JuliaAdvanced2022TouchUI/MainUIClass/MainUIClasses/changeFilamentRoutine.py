@@ -1,5 +1,5 @@
-from threads import octopiclient
-from config import filaments
+from MainUIClass.threads import octopiclient
+from MainUIClass.config import filaments
 
 class changeFilamentRoutine:
     def __init__(self, MainUIObj):
