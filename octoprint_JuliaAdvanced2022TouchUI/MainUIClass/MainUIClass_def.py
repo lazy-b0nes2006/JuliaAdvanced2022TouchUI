@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtGui
 from MainUIClass.MainUIClasses import changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
 import mainGUI
-from MainUIClass.config import Development, _fromUtf8
+from MainUIClass.config import Development, _fromUtf8, setCalibrationPosition
 import logging
 from MainUIClass.threads import *
 import styles
@@ -11,19 +11,18 @@ from MainUIClass.gui_elements import ClickableLineEdit
 
 from MainUIClass.import_helper import load_classes      #used to import all classes at runtime
 
+import dialog
+
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
-    def __init__(self, idex):
+    def __init__(self, printer):
         '''
         This method gets called when an object of type MainUIClass is defined
         '''
+        self.printer = printer
+        setCalibrationPosition(self)
+
         super(MainUIClass, self).__init__()
-
-        self.idex = idex
-
-        if self.idex:
-            from idexConfig import idexConfig
-            self.idexConfigInstance = idexConfig(self)
 
         # classes = load_classes('mainUI_classes')
         # globals().update(classes)
@@ -87,7 +86,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.sanityCheck = ThreadSanityCheck(virtual=False)
             self.sanityCheck.start()
             self.sanityCheck.loaded_signal.connect(self.proceed)
-            self.sanityCheck.startup_error_signal.connect(self.controlScreenInstance.handleStartupError)
+            self.sanityCheck.startup_error_signal.connect(self.handleStartupError)
 
 
             for spinbox in self.findChildren(QtWidgets.QSpinBox):
@@ -129,9 +128,109 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
 
         self.menuCartButton.setDisabled(True)
 
-        self.movie = QtGui.QMovie("templates/img/loading.gif")
+        if self.printer == "advanced":
+            self.movie = QtGui.QMovie("templates/img/loading.gif")
+        elif self.printer == "extended":
+            self.movie = QtGui.QMovie("templates/img/loading-90.gif")
         self.loadingGif.setMovie(self.movie)
         self.movie.start()
+
+    def safeProceed(self):
+        '''
+        When Octoprint server cannot connect for whatever reason, still show the home screen to conduct diagnostics
+        '''
+        self.movie.stop()
+        if not Development:
+            self.stackedWidget.setCurrentWidget(self.homePage)
+            # self.Lock_showLock()
+            self.setIPStatus()
+        else:
+            self.stackedWidget.setCurrentWidget(self.homePage)
+
+        # # Text Input events
+        self.wifiPasswordLineEdit.clicked_signal.connect(lambda: self.startKeyboard(self.wifiPasswordLineEdit.setText))
+        self.ethStaticIpLineEdit.clicked_signal.connect(lambda: self.ethShowKeyboard(self.ethStaticIpLineEdit))
+        self.ethStaticGatewayLineEdit.clicked_signal.connect(lambda: self.ethShowKeyboard(self.ethStaticGatewayLineEdit))
+
+        # Button Events:
+
+        # Home Screen:
+        self.stopButton.setDisabled()
+        # self.menuButton.pressed.connect(self.keyboardButton)
+        self.menuButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.MenuPage))
+        self.controlButton.setDisabled()
+        self.playPauseButton.setDisabled()
+
+        # MenuScreen
+        self.menuBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.homePage))
+        self.menuControlButton.setDisabled()
+        self.menuPrintButton.setDisabled()
+        self.menuCalibrateButton.setDisabled()
+        self.menuSettingsButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.settingsPage))
+
+
+        # Settings Page
+        self.networkSettingsButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
+        self.displaySettingsButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.displaySettingsPage))
+        self.settingsBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.MenuPage))
+        self.pairPhoneButton.pressed.connect(self.pairPhoneApp)
+        self.OTAButton.setDisabled()
+        self.versionButton.setDisabled()
+
+        self.restartButton.pressed.connect(self.askAndReboot)
+        self.restoreFactoryDefaultsButton.pressed.connect(self.restoreFactoryDefaults)
+        self.restorePrintSettingsButton.pressed.connect(self.restorePrintDefaults)
+
+        # Network settings page
+        self.networkInfoButton.pressed.connect(self.networkInfo)
+        self.configureWifiButton.pressed.connect(self.wifiSettings)
+        self.configureEthButton.pressed.connect(self.ethSettings)
+        self.networkSettingsBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.settingsPage))
+
+        # Network Info Page
+        self.networkInfoBackButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
+
+        # WifiSetings page
+        self.wifiSettingsSSIDKeyboardButton.pressed.connect(
+            lambda: self.startKeyboard(self.wifiSettingsComboBox.addItem))
+        self.wifiSettingsCancelButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
+        self.wifiSettingsDoneButton.pressed.connect(self.acceptWifiSettings)
+
+        # Ethernet setings page
+        self.ethStaticCheckBox.stateChanged.connect(self.ethStaticChanged)
+        # self.ethStaticCheckBox.stateChanged.connect(lambda: self.ethStaticSettings.setVisible(self.ethStaticCheckBox.isChecked()))
+        self.ethStaticIpKeyboardButton.pressed.connect(lambda: self.ethShowKeyboard(self.ethStaticIpLineEdit))
+        self.ethStaticGatewayKeyboardButton.pressed.connect(lambda: self.ethShowKeyboard(self.ethStaticGatewayLineEdit))
+        self.ethSettingsDoneButton.pressed.connect(self.ethSaveStaticNetworkInfo)
+        self.ethSettingsCancelButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.networkSettingsPage))
+
+        # Display settings
+        self.rotateDisplay.pressed.connect(self.showRotateDisplaySettingsPage)
+        self.calibrateTouch.pressed.connect(self.touchCalibration)
+        self.displaySettingsBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.settingsPage))
+
+        # Rotate Display Settings
+        self.rotateDisplaySettingsDoneButton.pressed.connect(self.saveRotateDisplaySettings)
+        self.rotateDisplaySettingsCancelButton.pressed.connect(
+            lambda: self.stackedWidget.setCurrentWidget(self.displaySettingsPage))
+
+        # QR Code
+        self.QRCodeBackButton.pressed.connect(lambda: self.stackedWidget.setCurrentWidget(self.settingsPage))
+
+        # SoftwareUpdatePage
+        self.softwareUpdateBackButton.setDisabled()
+        self.performUpdateButton.setDisabled()
+
+        # Firmware update page
+        self.firmwareUpdateBackButton.setDisabled()
+
+        # Filament sensor toggle
+        self.toggleFilamentSensorButton.setDisabled()
 
     def proceed(self):
         '''
@@ -177,10 +276,18 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.settingsPageInstance.connect()
         self.networkSettingsPageInstance.connect()
 
-        if self.idex:
-            self.idexConfigInstance.connect()
- 
         #  # Lock settings
         #     if not Development:
         #         self.lockSettingsInstance = lockSettings(self)
         
+    def handleStartupError(self):
+        if self.printer == "advanced":
+            print('Shutting Down. Unable to connect')
+            if dialog.WarningOk(self, "Error. Contact Support. Shutting down...", overlay=True):
+                os.system('sudo shutdown now')
+        
+        elif self.printer == "extended":
+            self.safeProceed()
+            print('Unable to connect to Octoprint Server')
+            if dialog.WarningOk(self, "Unable to connect to internal Server, try restoring factory settings", overlay=True):
+                pass

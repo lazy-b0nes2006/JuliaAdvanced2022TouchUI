@@ -74,8 +74,3 @@ class controlScreen:
         octopiclient.setBedTemperature(0)
         self.MainUIObj.toolTempSpinBox.setProperty("value", 0)
         self.MainUIObj.bedTempSpinBox.setProperty("value", 0)
-
-    def handleStartupError(self):
-        print('Shutting Down. Unable to connect')
-        if dialog.WarningOk(self, "Error. Contact Support. Shutting down...", overlay=True):
-            os.system('sudo shutdown now')

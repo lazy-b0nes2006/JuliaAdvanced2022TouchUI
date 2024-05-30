@@ -40,7 +40,7 @@ class socketConnections:
         self.MainUIObj.softwareUpdatesInstance.UpdateFailed(data)
 
     def onServerConnected(self):
-        self.MainUIObj.printLocationScreenInstance.onServerConnected()
+        self.MainUIObj.printRestoreInstance.onServerConnected()
 
     def firmwareUpdateHandler(self, data):
         self.MainUIObj.firmwareUpdatePageInstance.firmwareUpdateHandler(data)

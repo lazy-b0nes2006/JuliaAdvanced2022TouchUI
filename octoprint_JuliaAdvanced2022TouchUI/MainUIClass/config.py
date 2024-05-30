@@ -40,6 +40,7 @@ Testing:
 '''
 
 ip = '192.168.0.20'
+
 apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
 filaments = [
@@ -58,13 +59,29 @@ filaments = [
 
 filaments = OrderedDict(filaments)
 
-calibrationPosition = {'X1': 42, 'Y1': 21,
-                       'X2': 174, 'Y2': 21,
-                       'X3': 108, 'Y3': 195
-                       }
+calibrationPosition = {}
+
+get_calibrationPosition = {
+    "advanced" : {
+        'X1': 42, 'Y1': 21,
+        'X2': 174, 'Y2': 21,
+        'X3': 108, 'Y3': 195
+        },
+    "extended" : {
+        'X2': 202, 'Y2': 31,
+        'X1': 59, 'Y1': 31,
+        'X3': 131, 'Y3': 233
+    }
+}
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     def _fromUtf8(s):
         return s
+    
+def setCalibrationPosition(self):
+    global calibrationPosition
+    calibrationPosition = get_calibrationPosition[self.printer]
+
+
