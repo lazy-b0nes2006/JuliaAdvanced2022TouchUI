@@ -11,7 +11,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # Intialize the library (must be called once before other functions).
     # Creates an object of type MainUiClass
-    MainWindow = MainUIClass("advanced")
+    MainWindow = MainUIClass()
     MainWindow.show()
     # MainWindow.showFullScreen()
     # MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)

@@ -1,5 +1,7 @@
 from PyQt5 import QtCore
 from collections import OrderedDict
+import json
+import os
 
 Development = True   # set to True if running on any system other than RaspberryPi
 
@@ -62,17 +64,19 @@ filaments = OrderedDict(filaments)
 calibrationPosition = {}
 
 get_calibrationPosition = {
-    "advanced" : {
+    "Julia Advanced" : {
         'X1': 42, 'Y1': 21,
         'X2': 174, 'Y2': 21,
         'X3': 108, 'Y3': 195
         },
-    "extended" : {
+    "Julia Extended" : {
         'X2': 202, 'Y2': 31,
         'X1': 59, 'Y1': 31,
         'X3': 131, 'Y3': 233
     }
 }
+
+ 
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -82,6 +86,5 @@ except AttributeError:
     
 def setCalibrationPosition(self):
     global calibrationPosition
-    calibrationPosition = get_calibrationPosition[self.printer]
-
+    calibrationPosition = get_calibrationPosition[self.printerName]
 

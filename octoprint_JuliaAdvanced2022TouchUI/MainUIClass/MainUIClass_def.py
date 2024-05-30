@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtGui
-from MainUIClass.MainUIClasses import changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
+from MainUIClass.MainUIClasses import printerName, changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
 import mainGUI
 from MainUIClass.config import Development, _fromUtf8, setCalibrationPosition
 import logging
@@ -15,14 +15,14 @@ import dialog
 
 class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
     
-    def __init__(self, printer):
+    def __init__(self):
         '''
         This method gets called when an object of type MainUIClass is defined
         '''
-        self.printer = printer
-        setCalibrationPosition(self)
 
         super(MainUIClass, self).__init__()
+
+        self.printerNameInstance = printerName.printerName(self)
 
         # classes = load_classes('mainUI_classes')
         # globals().update(classes)
@@ -99,7 +99,8 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
 
 
         except Exception as e:
-            self._logger.error(e)
+            if not Development:
+                self._logger.error(e)
 
     def setupUi(self, MainWindow):
         super(MainUIClass, self).setupUi(MainWindow)
@@ -128,9 +129,15 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
 
         self.menuCartButton.setDisabled(True)
 
-        if self.printer == "advanced":
+        self.printerNameInstance.connect()
+        self.printerNameInstance.initialisePrinterNameJson()
+        self.printerName = self.printerNameInstance.getPrinterName()
+        self.printerNameInstance.setPrinterNameComboBox()
+        setCalibrationPosition(self)
+
+        if self.printer == "Julia Advanced":
             self.movie = QtGui.QMovie("templates/img/loading.gif")
-        elif self.printer == "extended":
+        elif self.printer == "Julia Extended":
             self.movie = QtGui.QMovie("templates/img/loading-90.gif")
         self.loadingGif.setMovie(self.movie)
         self.movie.start()
@@ -281,13 +288,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         #         self.lockSettingsInstance = lockSettings(self)
         
     def handleStartupError(self):
-        if self.printer == "advanced":
-            print('Shutting Down. Unable to connect')
-            if dialog.WarningOk(self, "Error. Contact Support. Shutting down...", overlay=True):
-                os.system('sudo shutdown now')
-        
-        elif self.printer == "extended":
-            self.safeProceed()
-            print('Unable to connect to Octoprint Server')
-            if dialog.WarningOk(self, "Unable to connect to internal Server, try restoring factory settings", overlay=True):
-                pass
+        self.safeProceed()
+        print('Unable to connect to Octoprint Server')
+        if dialog.WarningOk(self, "Unable to connect to internal Server, try restoring factory settings", overlay=True):
+            pass
