@@ -138,6 +138,8 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.movie = QtGui.QMovie("templates/img/loading.gif")
         elif self.printerName == "Julia Extended":
             self.movie = QtGui.QMovie("templates/img/loading-90.gif")
+        elif self.printerName == "Julia Pro Single Nozzle":
+            self.movie = QtGui.QMovie("templates/img/loading.gif")
         self.loadingGif.setMovie(self.movie)
         self.movie.start()
 
