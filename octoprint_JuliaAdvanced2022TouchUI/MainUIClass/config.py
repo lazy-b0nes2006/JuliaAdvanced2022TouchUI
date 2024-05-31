@@ -3,7 +3,7 @@ from collections import OrderedDict
 import json
 import os
 
-Development = True   # set to True if running on any system other than RaspberryPi
+Development = False   # set to True if running on any system other than RaspberryPi
 
 # TODO:
 '''

@@ -252,7 +252,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         if not Development:
             self.stackedWidget.setCurrentWidget(self.homePage)
             # self.Lock_showLock()
-            self.setIPStatus()
+            self.wifiSettingsPageInstance.setIPStatus()
         else:
             self.stackedWidget.setCurrentWidget(self.homePage)
 

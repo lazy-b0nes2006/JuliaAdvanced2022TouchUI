@@ -2,6 +2,7 @@ import json
 import os
 from PyQt5 import QtCore
 import sys
+from MainUIClass.config import Development
 
 json_file_name = 'printer_name.json'
 allowed_names = ["Julia Advanced", "Julia Extended", "Julia Pro Single Nozzle"]
@@ -19,9 +20,11 @@ class printerName:
         temp_printerName = self.getPrinterName()
         if temp_printerName != self.MainUIObj.printerNameComboBox.currentText():
             self.setPrinterName(self.MainUIObj.printerNameComboBox.currentText())
-            sys.exit()
-            if not self.MainUIObj.homePageInstance.askAndReboot("Reboot to reflect changes?"):
-                self.setPrinterName(temp_printerName)
+            if Development:
+                sys.exit()
+            else:
+                if not self.MainUIObj.homePageInstance.askAndReboot("Reboot to reflect changes?"):
+                    self.setPrinterName(temp_printerName)
 
     def getPrinterName(self):
         try:

@@ -4,6 +4,7 @@ from MainUIClass.config import Development
 
 if not Development:
     import RPi.GPIO as GPIO
+    GPIO.setmode(GPIO.BOARD)
 
 
 class BuzzerFeedback(object):
