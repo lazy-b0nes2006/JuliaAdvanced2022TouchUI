@@ -1,4 +1,4 @@
-from MainUIClass.config import calibrationPosition
+from MainUIClass.config import getCalibrationPosition
 from PyQt5 import QtGui
 from MainUIClass.threads import octopiclient
 
@@ -7,6 +7,9 @@ class calibrationPage:
         self.MainUIObj = MainUIObj
 
     def connect(self):
+
+        self.calibrationPosition = getCalibrationPosition(self.MainUIObj)
+
         self.MainUIObj.QtSocket.z_home_offset_signal.connect(self.getZHomeOffset)
 
         self.MainUIObj.calibrateBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.MenuPage))
@@ -115,7 +118,7 @@ class calibrationPage:
         :return:
         '''
         self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep3Page)
-        octopiclient.jog(x=calibrationPosition['X1'], y=calibrationPosition['Y1'], absolute=True, speed=9000)
+        octopiclient.jog(x=self.calibrationPosition['X1'], y=self.calibrationPosition['Y1'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
         self.MainUIObj.movie1.stop()
         self.MainUIObj.movie2 = QtGui.QMovie("templates/img/calibration/calib2.gif")
@@ -128,7 +131,7 @@ class calibrationPage:
         '''
         self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep4Page)
         octopiclient.jog(z=10, absolute=True, speed=1500)
-        octopiclient.jog(x=calibrationPosition['X2'], y=calibrationPosition['Y2'], absolute=True, speed=9000)
+        octopiclient.jog(x=self.calibrationPosition['X2'], y=self.calibrationPosition['Y2'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
         self.MainUIObj.movie2.stop()
         self.MainUIObj.movie3 = QtGui.QMovie("templates/img/calibration/calib3.gif")
@@ -142,7 +145,7 @@ class calibrationPage:
         '''
         self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep5Page)
         octopiclient.jog(z=10, absolute=True, speed=1500)
-        octopiclient.jog(x=calibrationPosition['X3'], y=calibrationPosition['Y3'], absolute=True, speed=9000)
+        octopiclient.jog(x=self.calibrationPosition['X3'], y=self.calibrationPosition['Y3'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
         self.MainUIObj.movie3.stop()
         self.MainUIObj.movie4 = QtGui.QMovie("templates/img/calibration/calib4.gif")

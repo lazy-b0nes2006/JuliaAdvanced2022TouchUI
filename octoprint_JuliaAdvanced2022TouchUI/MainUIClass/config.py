@@ -63,7 +63,7 @@ filaments = OrderedDict(filaments)
 
 calibrationPosition = {}
 
-get_calibrationPosition = {
+printerCalibrationPositions = {
     "Julia Advanced" : {
         'X1': 42, 'Y1': 21,
         'X2': 174, 'Y2': 21,
@@ -92,5 +92,8 @@ except AttributeError:
     
 def setCalibrationPosition(self):
     global calibrationPosition
-    calibrationPosition = get_calibrationPosition[self.printerName]
+    calibrationPosition = printerCalibrationPositions[self.printerName]
+
+def getCalibrationPosition(self):
+    return calibrationPosition
 

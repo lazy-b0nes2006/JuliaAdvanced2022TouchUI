@@ -1,6 +1,7 @@
 import sys
 from MainUIClass.MainUIClass_def import MainUIClass
 from PyQt5 import QtWidgets
+from MainUIClass.config import setCalibrationPosition, getCalibrationPosition
 
 #if not Development:
     #import RPi.GPIO as GPIO
@@ -18,4 +19,5 @@ if __name__ == '__main__':
     # Create NeoPixel object with appropriate configuration.
     # charm = FlickCharm()
     # charm.activateOn(MainWindow.FileListWidget)
+
 sys.exit(app.exec_())

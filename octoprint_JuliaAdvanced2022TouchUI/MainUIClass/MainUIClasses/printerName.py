@@ -19,7 +19,7 @@ class printerName:
         temp_printerName = self.getPrinterName()
         if temp_printerName != self.MainUIObj.printerNameComboBox.currentText():
             self.setPrinterName(self.MainUIObj.printerNameComboBox.currentText())
-            # sys.exit()
+            sys.exit()
             if not self.MainUIObj.homePageInstance.askAndReboot("Reboot to reflect changes?"):
                 self.setPrinterName(temp_printerName)
 
