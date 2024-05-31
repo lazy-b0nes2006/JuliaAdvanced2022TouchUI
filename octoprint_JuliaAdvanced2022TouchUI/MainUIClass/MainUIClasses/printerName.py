@@ -32,17 +32,20 @@ class printerName:
             return 'Julia Advanced'
 
     def initialisePrinterNameJson(self):
-        if not os.path.exists(json_file_name):
-            data = {'printer_name': 'Julia Advanced'}
-            self.writePrinterNameJson(data)
-        else:
-            try:
-                with open(json_file_name, 'r') as file:
-                    data = json.load(file)
-                if data.get('printer_name') not in allowed_names:
+        try:
+            if not os.path.exists(json_file_name):
+                data = {'printer_name': 'Julia Advanced'}
+                self.writePrinterNameJson(data)
+            else:
+                try:
+                    with open(json_file_name, 'r') as file:
+                        data = json.load(file)
+                    if data.get('printer_name') not in allowed_names:
+                        self.setPrinterName("Julia Advanced")
+                except (FileNotFoundError, json.JSONDecodeError):
                     self.setPrinterName("Julia Advanced")
-            except (FileNotFoundError, json.JSONDecodeError):
-                self.setPrinterName("Julia Advanced")
+        except Exception as e:
+            self.MainUIObj._logger.error(e)
 
     def setPrinterName(self, name):
         data = {"printer_name": name}
