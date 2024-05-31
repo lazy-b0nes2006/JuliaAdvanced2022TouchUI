@@ -130,14 +130,13 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.menuCartButton.setDisabled(True)
 
         self.printerNameInstance.connect()
-        self.printerNameInstance.initialisePrinterNameJson()
         self.printerName = self.printerNameInstance.getPrinterName()
         self.printerNameInstance.setPrinterNameComboBox()
         setCalibrationPosition(self)
 
-        if self.printer == "Julia Advanced":
+        if self.printerName == "Julia Advanced":
             self.movie = QtGui.QMovie("templates/img/loading.gif")
-        elif self.printer == "Julia Extended":
+        elif self.printerName == "Julia Extended":
             self.movie = QtGui.QMovie("templates/img/loading-90.gif")
         self.loadingGif.setMovie(self.movie)
         self.movie.start()
