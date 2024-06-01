@@ -41,7 +41,7 @@ Testing:
 # dissable buttons while printing
 '''
 
-ip = '192.168.0.20'
+ip = '192.168.0.50'     #advanced: 192.168.0.20, extended: 192.168.0.10, pro: 192.168.0.50
 
 apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''

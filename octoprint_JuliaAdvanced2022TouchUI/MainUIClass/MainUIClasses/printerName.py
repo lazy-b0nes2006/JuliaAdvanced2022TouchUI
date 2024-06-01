@@ -4,7 +4,13 @@ from PyQt5 import QtCore
 import sys
 from MainUIClass.config import Development
 
-json_file_name = 'printer_name.json'
+if not Development:
+    json_file_name = '/home/pi/printer_name.json'
+else:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+    json_file_name = os.path.join(parent_dir, 'printer_name.json')
+    
 allowed_names = ["Julia Advanced", "Julia Extended", "Julia Pro Single Nozzle"]
 
 class printerName:
