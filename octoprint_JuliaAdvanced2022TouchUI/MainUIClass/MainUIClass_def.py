@@ -9,7 +9,7 @@ from MainUIClass.socket_qt import QtWebsocket
 
 from MainUIClass.gui_elements import ClickableLineEdit
 
-from MainUIClass.import_helper import load_classes      #used to import all classes at runtime
+# from MainUIClass.import_helper import load_classes      #used to import all classes at runtime
 
 import dialog
 
