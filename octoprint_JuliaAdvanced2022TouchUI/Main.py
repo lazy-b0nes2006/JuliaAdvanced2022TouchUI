@@ -6,7 +6,7 @@ from MainUIClass.config import setCalibrationPosition, getCalibrationPosition
 #if not Development:
     #import RPi.GPIO as GPIO
     #GPIO.setmode(GPIO.BCM)  # Use the board numbering scheme
-    #GPIO.setwarnings(False)  # Disable GPIO warnings H
+    #GPIO.setwarnings(False)  # Disable GPIO warnings 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

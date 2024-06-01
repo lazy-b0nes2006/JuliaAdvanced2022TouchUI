@@ -108,9 +108,10 @@ class calibrationPage:
         :return:
         '''
         self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep2Page)
-        self.MainUIObj.movie1 = QtGui.QMovie("templates/img/calibration/calib1.gif")
-        self.MainUIObj.calib1.setMovie(self.MainUIObj.movie1)
-        self.MainUIObj.movie1.start()
+        if self.MainUIObj.printerName != "Julia Pro Single Nozzle":
+            self.MainUIObj.movie1 = QtGui.QMovie("templates/img/calibration/calib1.gif")
+            self.MainUIObj.calib1.setMovie(self.MainUIObj.movie1)
+            self.MainUIObj.movie1.start()
 
     def quickStep3(self):
         '''
@@ -120,10 +121,11 @@ class calibrationPage:
         self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.quickStep3Page)
         octopiclient.jog(x=self.calibrationPosition['X1'], y=self.calibrationPosition['Y1'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.MainUIObj.movie1.stop()
-        self.MainUIObj.movie2 = QtGui.QMovie("templates/img/calibration/calib2.gif")
-        self.MainUIObj.calib2.setMovie(self.MainUIObj.movie2)
-        self.MainUIObj.movie2.start()
+        if self.MainUIObj.printerName != "Julia Pro Single Nozzle":
+            self.MainUIObj.movie1.stop()
+            self.MainUIObj.movie2 = QtGui.QMovie("templates/img/calibration/calib2.gif")
+            self.MainUIObj.calib2.setMovie(self.MainUIObj.movie2)
+            self.MainUIObj.movie2.start()
 
     def quickStep4(self):
         '''
@@ -133,10 +135,11 @@ class calibrationPage:
         octopiclient.jog(z=10, absolute=True, speed=1500)
         octopiclient.jog(x=self.calibrationPosition['X2'], y=self.calibrationPosition['Y2'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.MainUIObj.movie2.stop()
-        self.MainUIObj.movie3 = QtGui.QMovie("templates/img/calibration/calib3.gif")
-        self.MainUIObj.calib3.setMovie(self.MainUIObj.movie3)
-        self.MainUIObj.movie3.start()
+        if self.MainUIObj.printerName != "Julia Pro Single Nozzle":
+            self.MainUIObj.movie2.stop()
+            self.MainUIObj.movie3 = QtGui.QMovie("templates/img/calibration/calib3.gif")
+            self.MainUIObj.calib3.setMovie(self.MainUIObj.movie3)
+            self.MainUIObj.movie3.start()
 
     def quickStep5(self):
         '''
@@ -147,10 +150,11 @@ class calibrationPage:
         octopiclient.jog(z=10, absolute=True, speed=1500)
         octopiclient.jog(x=self.calibrationPosition['X3'], y=self.calibrationPosition['Y3'], absolute=True, speed=9000)
         octopiclient.jog(z=0, absolute=True, speed=1500)
-        self.MainUIObj.movie3.stop()
-        self.MainUIObj.movie4 = QtGui.QMovie("templates/img/calibration/calib4.gif")
-        self.MainUIObj.calib4.setMovie(self.MainUIObj.movie4)
-        self.MainUIObj.movie4.start()
+        if self.MainUIObj.printerName != "Julia Pro Single Nozzle":
+            self.MainUIObj.movie3.stop()
+            self.MainUIObj.movie4 = QtGui.QMovie("templates/img/calibration/calib4.gif")
+            self.MainUIObj.calib4.setMovie(self.MainUIObj.movie4)
+            self.MainUIObj.movie4.start()
 
     # def quickStep6(self):
     #     '''
