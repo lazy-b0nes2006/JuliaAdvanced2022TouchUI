@@ -1,6 +1,6 @@
 import dialog
 import os
-from MainUIClass.threads import octopiclient
+from MainUIClass.config import octopiclient
 
 
 class homePage:

@@ -1,13 +1,18 @@
-from PyQt5 import QtWidgets, QtGui
-from MainUIClass.MainUIClasses import printerName, changeFilamentRoutine, controlScreen, displaySettings, ethernetSettingsPage, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, networkInfoPage, networkSettingsPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, wifiSettingsPage, calibrationPage
+from PyQt5 import QtWidgets, QtGui, QtCore
+from MainUIClass.MainUIClasses import printerName, changeFilamentRoutine, controlScreen, displaySettings, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, calibrationPage, networking
 import mainGUI
-from MainUIClass.config import Development, _fromUtf8, setCalibrationPosition
+from MainUIClass.config import _fromUtf8, setCalibrationPosition, ip, apiKey, Development, octopiclient
 import logging
-from MainUIClass.threads import *
 import styles
 from MainUIClass.socket_qt import QtWebsocket
 
 from MainUIClass.gui_elements import ClickableLineEdit
+
+from octoprintAPI import octoprintAPI
+
+import subprocess
+
+import time
 
 # from MainUIClass.import_helper import load_classes      #used to import all classes at runtime
 
@@ -41,15 +46,12 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.getFilesAndInfoInstance = getFilesAndInfo.getFilesAndInfo(self)
         self.printLocationScreenInstance = printLocationScreen.printLocationScreen(self)
         self.changeFilamentRoutineInstance = changeFilamentRoutine.changeFilamentRoutine(self)
-        self.networkInfoPageInstance = networkInfoPage.networkInfoPage(self)
-        self.wifiSettingsPageInstance = wifiSettingsPage.wifiSettingsPage(self)
-        self.ethernetSettingsPageInstance = ethernetSettingsPage.ethernetSettingsPage(self)
+        self.networkingInstance = networking.networking(self)
         self.displaySettingsInstance = displaySettings.displaySettings(self)
         self.softwareUpdatePageInstance = softwareUpdatePage.softwareUpdatePage(self)
         self.firmwareUpdatePageInstance = firmwareUpdatePage.firmwareUpdatePage(self)
         self.filamentSensorInstance = filamentSensor.filamentSensor(self)
         self.settingsPageInstance = settingsPage.settingsPage(self)
-        self.networkSettingsPageInstance = networkSettingsPage.networkSettingsPage(self)
  
         if not Development:
             formatter = logging.Formatter("%(asctime)s %(message)s")
@@ -257,7 +259,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
             self.stackedWidget.setCurrentWidget(self.homePage)
 
         self.filamentSensorInstance.isFilamentSensorInstalled()
-        self.printRestoreInstance.onServerConnected()
+        self.onServerConnected()
 
     def setActions(self):
 
@@ -274,15 +276,12 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.printLocationScreenInstance.connect()  
         self.controlScreenInstance.connect()
         self.changeFilamentRoutineInstance.connect()
-        self.networkInfoPageInstance.connect()
-        self.wifiSettingsPageInstance.connect()
-        self.ethernetSettingsPageInstance.connect()
+        self.networkingInstance.connect()
         self.displaySettingsInstance.connect()
         self.softwareUpdatePageInstance.connect()
         self.firmwareUpdatePageInstance.connect()
         self.filamentSensorInstance.connect()
         self.settingsPageInstance.connect()
-        self.networkSettingsPageInstance.connect()
 
         #  # Lock settings
         #     if not Development:
@@ -293,3 +292,71 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         print('Unable to connect to Octoprint Server')
         if dialog.WarningOk(self, "Unable to connect to internal Server, try restoring factory settings", overlay=True):
             pass
+
+    def onServerConnected(self):
+        self.filamentSensorInstance.isFilamentSensorInstalled()
+        # if not self.__timelapse_enabled:
+        #     return
+        # if self.__timelapse_started:
+        #     return
+        try:
+            response = octopiclient.isFailureDetected()
+            if response["canRestore"] is True:
+                self.printRestoreInstance.printRestoreMessageBox(response["file"])
+            else:
+                self.firmwareUpdatePageInstance.firmwareUpdateCheck()
+        except:
+            print ("error on Server Connected")
+            pass
+
+
+class ThreadSanityCheck(QtCore.QThread):
+
+    loaded_signal = QtCore.pyqtSignal()
+    startup_error_signal = QtCore.pyqtSignal()
+
+    def __init__(self, logger = None, virtual=False):
+        super(ThreadSanityCheck, self).__init__()
+        self.MKSPort = None
+        self.virtual = virtual
+        if not Development:
+            self._logger = logger
+
+    def run(self):
+        global octopiclient
+        self.shutdown_flag = False
+        # get the first value of t1 (runtime check)
+        uptime = 0
+        # keep trying untill octoprint connects
+        while (True):
+            # Start an object instance of octopiAPI
+            try:
+                if (uptime > 30):
+                    self.shutdown_flag = True
+                    self.startup_error_signal.emit()
+                    break
+                #octopiclient = octoprintAPI(ip, apiKey)
+                if not self.virtual:
+                    result = subprocess.Popen("dmesg | grep 'ttyUSB'", stdout=subprocess.PIPE, shell=True).communicate()[0]
+                    result = result.split(b'\n')  # each ssid and pass from an item in a list ([ssid pass,ssid paas])
+                    print(result)
+                    result = [s.strip() for s in result]
+                    for line in result:
+                        if b'FTDI' in line:
+                            self.MKSPort = line[line.index(b'ttyUSB'):line.index(b'ttyUSB') + 7].decode('utf-8')
+                            print(self.MKSPort)
+                        if b'ch34' in line:
+                            self.MKSPort = line[line.index(b'ttyUSB'):line.index(b'ttyUSB') + 7].decode('utf-8')
+                            print(self.MKSPort)
+
+                    if not self.MKSPort:
+                        octopiclient.connectPrinter(port="VIRTUAL", baudrate=115200)
+                    else:
+                        octopiclient.connectPrinter(port="/dev/" + self.MKSPort, baudrate=115200)
+                break
+            except Exception as e:
+                time.sleep(1)
+                uptime = uptime + 1
+                print("Not Connected!")
+        if not self.shutdown_flag:
+            self.loaded_signal.emit()

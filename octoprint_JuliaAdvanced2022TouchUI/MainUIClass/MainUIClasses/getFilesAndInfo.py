@@ -1,8 +1,8 @@
-from MainUIClass.threads import octopiclient, ThreadFileUpload
+from MainUIClass.config import octopiclient
 import os
 import subprocess
 from datetime import datetime
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from MainUIClass.config import _fromUtf8
 from hurry.filesize import size
 
@@ -189,4 +189,24 @@ class getFilesAndInfo:
 
         # delete PNG also
         self.fileListLocal()
+
+class ThreadFileUpload(QtCore.QThread):
+    def __init__(self, file, prnt=False):
+        super(ThreadFileUpload, self).__init__()
+        self.file = file
+        self.prnt = prnt
+
+    def run(self):
+
+        try:
+            exists = os.path.exists(self.file.replace(".gcode", ".png"))
+        except:
+            exists = False
+        if exists:
+            octopiclient.uploadImage(self.file.replace(".gcode", ".png"))
+
+        if self.prnt:
+            octopiclient.uploadGcode(file=self.file, select=True, prnt=True)
+        else:
+            octopiclient.uploadGcode(file=self.file, select=False, prnt=False)
 

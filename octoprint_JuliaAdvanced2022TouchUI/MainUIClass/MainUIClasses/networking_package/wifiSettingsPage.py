@@ -1,8 +1,7 @@
 import io
 import subprocess
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import dialog
-from MainUIClass.threads import ThreadRestartNetworking
 from MainUIClass.network_utils import *
 import time
 from MainUIClass.decorators import run_async
@@ -109,3 +108,40 @@ class wifiSettingsPage:
             except:
                 self.MainUIObj.ipStatus.setText("Not connected")
             time.sleep(60)
+
+class ThreadRestartNetworking(QtCore.QThread):
+    WLAN = "wlan0"
+    ETH = "eth0"
+    signal = QtCore.pyqtSignal('PyQt_PyObject')
+
+    def __init__(self, interface):
+        super(ThreadRestartNetworking, self).__init__()
+        self.interface = interface
+    def run(self):
+        self.restart_interface()
+        attempt = 0
+        while attempt < 3:
+            # print(getIP(self.interface))
+            if getIP(self.interface):
+                self.signal.emit(getIP(self.interface))
+                break
+            else:
+                attempt += 1
+                time.sleep(5)
+        if attempt >= 3:
+            self.signal.emit(None)
+
+    def restart_interface(self):
+        '''
+        restars wlan0 wireless interface to use new changes in wpa_supplicant.conf file
+        :return:
+        '''
+        if self.interface == "wlan0":
+            subprocess.call(["wpa_cli","-i",  self.interface, "reconfigure"], shell=False)
+        if self.interface == "eth0":
+            subprocess.call(["ifconfig",  self.interface, "down"], shell=False)
+            time.sleep(1)
+            subprocess.call(["ifconfig", self.interface, "up"], shell=False)
+        # subprocess.call(["ifdown", "--force", self.interface], shell=False)
+        # subprocess.call(["ifup", "--force", self.interface], shell=False)
+        time.sleep(5)

@@ -1,4 +1,4 @@
-from MainUIClass.threads import octopiclient
+from MainUIClass.config import octopiclient
 from octoprintAPI import octoprintAPI
 import dialog
 
@@ -18,19 +18,3 @@ class printRestore:
                 dialog.WarningOk(response["status"])
         else:
             octoprintAPI.restore(restore=False)
-
-    def onServerConnected(self):
-        self.MainUIObj.filamentSensorInstance.isFilamentSensorInstalled()
-        # if not self.__timelapse_enabled:
-        #     return
-        # if self.__timelapse_started:
-        #     return
-        try:
-            response = octopiclient.isFailureDetected()
-            if response["canRestore"] is True:
-                self.printRestoreMessageBox(response["file"])
-            else:
-                self.MainUIObj.firmwareUpdatePageInstance.firmwareUpdateCheck()
-        except:
-            print ("error on Server Connected")
-            pass

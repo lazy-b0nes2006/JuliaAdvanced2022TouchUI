@@ -1,8 +1,7 @@
 import sys
 from MainUIClass.MainUIClass_def import MainUIClass
 from PyQt5 import QtWidgets
-from MainUIClass.config import setCalibrationPosition, getCalibrationPosition
-
+from MainUIClass.config import Development
 #if not Development:
     #import RPi.GPIO as GPIO
     #GPIO.setmode(GPIO.BCM)  # Use the board numbering scheme

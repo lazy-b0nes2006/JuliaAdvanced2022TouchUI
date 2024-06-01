@@ -1,7 +1,6 @@
 import os
 import re
 import subprocess
-from PyQt5 import QtWidgets
 from dialog import WarningOk
 
 class displaySettings:

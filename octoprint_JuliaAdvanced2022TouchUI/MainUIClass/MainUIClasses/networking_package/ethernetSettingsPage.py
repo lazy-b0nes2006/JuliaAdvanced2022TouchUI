@@ -1,7 +1,7 @@
 import subprocess
 from PyQt5 import QtWidgets
 import dialog
-from MainUIClass.threads import ThreadRestartNetworking
+from MainUIClass.MainUIClasses.networking_package.wifiSettingsPage import ThreadRestartNetworking
 from MainUIClass.network_utils import *
 import re
 

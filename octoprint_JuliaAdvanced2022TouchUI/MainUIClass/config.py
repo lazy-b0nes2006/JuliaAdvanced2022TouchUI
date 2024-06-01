@@ -1,9 +1,8 @@
 from PyQt5 import QtCore
 from collections import OrderedDict
-import json
-import os
+from octoprintAPI import octoprintAPI
 
-Development = False   # set to True if running on any system other than RaspberryPi
+Development = True   # set to True if running on any system other than RaspberryPi
 
 # TODO:
 '''
@@ -41,7 +40,7 @@ Testing:
 # dissable buttons while printing
 '''
 
-ip = '192.168.0.50'     #advanced: 192.168.0.20, extended: 192.168.0.10, pro: 192.168.0.50
+ip = '192.168.0.20'     #advanced: 192.168.0.20, extended: 192.168.0.10, pro: 192.168.0.50
 
 apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
@@ -82,7 +81,7 @@ printerCalibrationPositions = {
     }
 }
 
- 
+octopiclient = octoprintAPI(ip, apiKey)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

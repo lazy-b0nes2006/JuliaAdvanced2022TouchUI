@@ -1,4 +1,4 @@
-from MainUIClass.threads import octopiclient
+from MainUIClass.config import octopiclient
 from MainUIClass.config import filaments
 
 class changeFilamentRoutine:
