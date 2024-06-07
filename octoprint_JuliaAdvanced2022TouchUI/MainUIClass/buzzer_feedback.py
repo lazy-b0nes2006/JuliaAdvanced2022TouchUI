@@ -4,7 +4,8 @@ from MainUIClass.config import Development
 
 if not Development:
     import RPi.GPIO as GPIO
-    
+    GPIO.setmode(GPIO.BCM)  # Use the board numbering scheme
+    GPIO.setwarnings(False)  # Disable GPIO warnings H
 
 
 class BuzzerFeedback(object):
