@@ -1,5 +1,4 @@
 from MainUIClass.config import *
-from MainUIClass.threads import *
 from MainUIClass.socket_qt import *
 from MainUIClass.network_utils import *
 

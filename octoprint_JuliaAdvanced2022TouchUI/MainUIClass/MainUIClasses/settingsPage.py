@@ -1,6 +1,7 @@
 from MainUIClass.network_utils import getIP
 import qrcode
-from MainUIClass.threads import ThreadRestartNetworking, octopiclient
+from MainUIClass.config import octopiclient
+from MainUIClass.MainUIClasses.networking_package.wifiSettingsPage import ThreadRestartNetworking
 from MainUIClass.gui_elements import Image
 import dialog
 import os

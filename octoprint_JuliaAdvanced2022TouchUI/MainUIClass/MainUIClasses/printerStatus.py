@@ -1,6 +1,6 @@
 import styles
 from PyQt5 import QtGui
-from MainUIClass.threads import octopiclient
+from MainUIClass.config import octopiclient
 from MainUIClass.config import _fromUtf8
 
 class printerStatus:
@@ -28,7 +28,7 @@ class printerStatus:
             self.MainUIObj.tool0TempBar.setMaximum(int(temperature['tool0Target']))
             self.MainUIObj.tool0TempBar.setStyleSheet(styles.bar_heater_heating)
         else:
-            self.MainUIObj.tool0TempBar.setMaximum(temperature['tool0Actual'])
+            self.MainUIObj.tool0TempBar.setMaximum(int(temperature['tool0Actual']))
         self.MainUIObj.tool0TempBar.setValue(int(temperature['tool0Actual']))
         self.MainUIObj.tool0ActualTemperature.setText(str(int(temperature['tool0Actual'])))
         self.MainUIObj.tool0TargetTemperature.setText(str(int(temperature['tool0Target'])))
@@ -37,7 +37,7 @@ class printerStatus:
             self.MainUIObj.bedTempBar.setMaximum(150)
             self.MainUIObj.bedTempBar.setStyleSheet(styles.bar_heater_cold)
         elif temperature['bedActual'] <= temperature['bedTarget']:
-            self.MainUIObj.bedTempBar.setMaximum(temperature['bedTarget'])
+            self.MainUIObj.bedTempBar.setMaximum(int(temperature['bedTarget']))
             self.MainUIObj.bedTempBar.setStyleSheet(styles.bar_heater_heating)
         else:
             self.MainUIObj.bedTempBar.setMaximum(int(temperature['bedActual']))
@@ -50,9 +50,9 @@ class printerStatus:
             if temperature['tool0Target'] == 0:
                 self.MainUIObj.changeFilamentProgress.setMaximum(300)
             elif temperature['tool0Target'] - temperature['tool0Actual'] > 1:
-                self.MainUIObj.changeFilamentProgress.setMaximum(temperature['tool0Target'])
+                self.MainUIObj.changeFilamentProgress.setMaximum(int(temperature['tool0Target']))
             else:
-                self.MainUIObj.changeFilamentProgress.setMaximum(temperature['tool0Actual'])
+                self.MainUIObj.changeFilamentProgress.setMaximum(int(temperature['tool0Actual']))
                 self.MainUIObj.changeFilamentHeatingFlag = False
                 if self.MainUIObj.loadFlag:
                     self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.changeFilamentExtrudePage)
@@ -60,7 +60,7 @@ class printerStatus:
                     self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.changeFilamentRetractPage)
                     octopiclient.extrude(10)  # extrudes some amount of filament to prevent plugging
 
-            self.MainUIObj.changeFilamentProgress.setValue(temperature['tool0Actual'])
+            self.MainUIObj.changeFilamentProgress.setValue(int(temperature['tool0Actual']))
 
     def updatePrintStatus(self, file):
         '''

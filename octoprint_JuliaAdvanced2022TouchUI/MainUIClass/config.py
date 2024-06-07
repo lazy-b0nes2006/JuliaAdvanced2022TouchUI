@@ -1,7 +1,6 @@
 from PyQt5 import QtCore
 from collections import OrderedDict
-import json
-import os
+from octoprintAPI import octoprintAPI
 
 Development = True   # set to True if running on any system other than RaspberryPi
 
@@ -41,7 +40,7 @@ Testing:
 # dissable buttons while printing
 '''
 
-ip = '192.168.0.20'
+ip = '192.168.0.20'     #advanced: 192.168.0.20, extended: 192.168.0.10, pro: 192.168.0.50
 
 apiKey = 'B508534ED20348F090B4D0AD637D3660'
 file_name = ''
@@ -63,7 +62,7 @@ filaments = OrderedDict(filaments)
 
 calibrationPosition = {}
 
-get_calibrationPosition = {
+printerCalibrationPositions = {
     "Julia Advanced" : {
         'X1': 42, 'Y1': 21,
         'X2': 174, 'Y2': 21,
@@ -73,10 +72,16 @@ get_calibrationPosition = {
         'X2': 202, 'Y2': 31,
         'X1': 59, 'Y1': 31,
         'X3': 131, 'Y3': 233
+    },
+    "Julia Pro Single Nozzle" : {
+        'X1': 371, 'Y1': 42,
+        'X2': 63, 'Y2': 42,
+        'X3': 216, 'Y3': 350,
+        'X4': 183, 'Y4': 33
     }
 }
 
- 
+octopiclient = octoprintAPI(ip, apiKey)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -86,5 +91,8 @@ except AttributeError:
     
 def setCalibrationPosition(self):
     global calibrationPosition
-    calibrationPosition = get_calibrationPosition[self.printerName]
+    calibrationPosition = printerCalibrationPositions[self.printerName]
+
+def getCalibrationPosition(self):
+    return calibrationPosition
 

@@ -1,6 +1,4 @@
-from MainUIClass.threads import octopiclient
-import dialog
-import os
+from MainUIClass.config import octopiclient
 
 class controlScreen:
     def __init__(self, MainUIObj):

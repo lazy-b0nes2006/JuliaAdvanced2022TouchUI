@@ -2,8 +2,15 @@ import json
 import os
 from PyQt5 import QtCore
 import sys
+from MainUIClass.config import Development
 
-json_file_name = 'printer_name.json'
+if not Development:
+    json_file_name = '/home/pi/printer_name.json'
+else:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+    json_file_name = os.path.join(parent_dir, 'printer_name.json')
+    
 allowed_names = ["Julia Advanced", "Julia Extended", "Julia Pro Single Nozzle"]
 
 class printerName:
@@ -19,9 +26,11 @@ class printerName:
         temp_printerName = self.getPrinterName()
         if temp_printerName != self.MainUIObj.printerNameComboBox.currentText():
             self.setPrinterName(self.MainUIObj.printerNameComboBox.currentText())
-            # sys.exit()
-            if not self.MainUIObj.homePageInstance.askAndReboot("Reboot to reflect changes?"):
-                self.setPrinterName(temp_printerName)
+            if Development:
+                sys.exit()
+            else:
+                if not self.MainUIObj.homePageInstance.askAndReboot("Reboot to reflect changes?"):
+                    self.setPrinterName(temp_printerName)
 
     def getPrinterName(self):
         try:
@@ -32,17 +41,20 @@ class printerName:
             return 'Julia Advanced'
 
     def initialisePrinterNameJson(self):
-        if not os.path.exists(json_file_name):
-            data = {'printer_name': 'Julia Advanced'}
-            self.writePrinterNameJson(data)
-        else:
-            try:
-                with open(json_file_name, 'r') as file:
-                    data = json.load(file)
-                if data.get('printer_name') not in allowed_names:
+        try:
+            if not os.path.exists(json_file_name):
+                data = {'printer_name': 'Julia Advanced'}
+                self.writePrinterNameJson(data)
+            else:
+                try:
+                    with open(json_file_name, 'r') as file:
+                        data = json.load(file)
+                    if data.get('printer_name') not in allowed_names:
+                        self.setPrinterName("Julia Advanced")
+                except (FileNotFoundError, json.JSONDecodeError):
                     self.setPrinterName("Julia Advanced")
-            except (FileNotFoundError, json.JSONDecodeError):
-                self.setPrinterName("Julia Advanced")
+        except Exception as e:
+            self.MainUIObj._logger.error(e)
 
     def setPrinterName(self, name):
         data = {"printer_name": name}
