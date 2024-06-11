@@ -7,6 +7,11 @@ class printerStatus:
     def __init__(self, MainUIObj):
         self.MainUIObj = MainUIObj
 
+    def connect(self):
+        self.MainUIObj.QtSocket.temperatures_signal.connect(self.updateTemperature)
+        self.MainUIObj.QtSocket.status_signal.connect(self.updateStatus)
+        self.MainUIObj.QtSocket.print_status_signal.connect(self.updatePrintStatus)
+
     ''' +++++++++++++++++++++++++++++++++Printer Status+++++++++++++++++++++++++++++++++++ '''
     def updateTemperature(self, temperature):
         '''

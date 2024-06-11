@@ -11,6 +11,7 @@ class firmwareUpdatePage:
 
     def connect(self):
         self.MainUIObj.firmwareUpdateBackButton.pressed.connect(self.firmwareUpdateBack)
+        self.MainUIObj.QtSocket.firmware_updater_signal.connect(self.firmwareUpdateHandler)
 
     def firmwareUpdateCheck(self):
         headers = {'X-Api-Key': apiKey}

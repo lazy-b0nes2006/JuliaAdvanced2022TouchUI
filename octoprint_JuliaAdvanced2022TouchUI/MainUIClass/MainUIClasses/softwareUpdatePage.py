@@ -12,6 +12,11 @@ class softwareUpdatePage:
         self.MainUIObj.softwareUpdateBackButton.pressed.connect(lambda: self.MainUIObj.stackedWidget.setCurrentWidget(self.MainUIObj.settingsPage))
         self.MainUIObj.performUpdateButton.pressed.connect(lambda: octopiclient.performSoftwareUpdate())
 
+        self.MainUIObj.QtSocket.update_started_signal.connect(self.softwareUpdateProgress)
+        self.MainUIObj.QtSocket.update_log_signal.connect(self.softwareUpdateProgressLog)
+        self.MainUIObj.QtSocket.update_log_result_signal.connect(self.softwareUpdateResult)
+        self.MainUIObj.QtSocket.update_failed_signal.connect(self.updateFailed)
+
     ''' +++++++++++++++++++++++++++++++++OTA Update+++++++++++++++++++++++++++++++++++ '''
 
     def getFirmwareVersion(self):

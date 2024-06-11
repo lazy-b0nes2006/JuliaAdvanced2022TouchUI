@@ -12,7 +12,8 @@ def getIP(interface):
         mtIp = re.search(rInetAddr, scan_result)
         if not(mt6Ip) and mtIp and len(mtIp.groups()) == 1:
             return str(mtIp.group(1))
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 def getMac(interface):

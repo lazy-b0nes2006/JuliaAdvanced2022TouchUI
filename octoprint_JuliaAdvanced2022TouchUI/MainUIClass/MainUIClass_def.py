@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from MainUIClass.MainUIClasses import printerName, changeFilamentRoutine, controlScreen, displaySettings, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, socketConnections, softwareUpdatePage, start_keyboard, calibrationPage, networking
+from MainUIClass.MainUIClasses import printerName, changeFilamentRoutine, controlScreen, displaySettings, filamentSensor, firmwareUpdatePage, getFilesAndInfo, homePage, menuPage, printLocationScreen, printRestore, printerStatus, settingsPage, settingsPage, softwareUpdatePage, start_keyboard, calibrationPage, networking
 import mainGUI
 from MainUIClass.config import _fromUtf8, setCalibrationPosition, ip, apiKey, Development, octopiclient
 import logging
@@ -38,7 +38,6 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.startKeyboard = start_keyboard.startKeyboard
 
         self.printerStatusInstance = printerStatus.printerStatus(self)    
-        self.socketConnectionsInstance = socketConnections.socketConnections(self)
         #Initialising all pages/screens
         self.homePageInstance = homePage.homePage(self)
         self.menuPageInstance = menuPage.menuPage(self)
@@ -266,6 +265,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         '''
         defines all the Slots and Button events.
         '''
+        self.QtSocket.connected_signal.connect(self.onServerConnected)
 
         self.socketConnectionsInstance.connect()  
         #Initialising all pages/screens
@@ -282,6 +282,7 @@ class MainUIClass(QtWidgets.QMainWindow, mainGUI.Ui_MainWindow):
         self.firmwareUpdatePageInstance.connect()
         self.filamentSensorInstance.connect()
         self.settingsPageInstance.connect()
+        self.printerStatusInstance.connect()
 
         #  # Lock settings
         #     if not Development:

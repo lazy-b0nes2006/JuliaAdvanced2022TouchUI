@@ -10,6 +10,7 @@ class filamentSensor:
 
     def connect(self):
         self.MainUIObj.toggleFilamentSensorButton.clicked.connect(self.toggleFilamentSensor)
+        self.MainUIObj.QtSocket.filament_sensor_triggered_signal.connect(self.filamentSensorHandler)
 
     def isFilamentSensorInstalled(self):
         success = False
